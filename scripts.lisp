@@ -87,7 +87,8 @@
                                        (substr text (+ (search "<body>" text
                                                                :test 'string=)
                                                         6)
-                                               -7))))
+                                               (search "</body>" text
+                                                       :test 'string=)))))
           (let ((toks (tokenize *tokenizer*
                                 (re:regex-replace-all "</?[^>]+>" sent ""))))
             (write-line (strjoin #\Space toks)
