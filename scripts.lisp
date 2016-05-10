@@ -6,7 +6,8 @@
   (ql:quickload :cl-nlp)
   (use-package :rutilsx)
   (use-package :ncore)
-  (use-package :nutil))
+  (use-package :nutil)
+  (use-package :should-test))
 
 (named-readtables:in-readtable rutilsx:rutilsx-readtable)
 
@@ -86,9 +87,12 @@
                  ;; multiple dashes
                  "|-+"))))
 
+(defparameter +uk-abbrevs+
+  (list-from-file (data-file "uk/abbrevs-with-dot.txt")))
+
 (defun tokenize-text (file)
   (let ((text (read-file file))
-        (+abbrevs-with-dot+ (list-from-file (data-file "uk/abbrevs-with-dot.txt"))))
+        (+abbrevs-with-dot+ +uk-abbrevs+))
     (with-out-file (xml-out (strcat file ".xml"))
       (write-line "<root><body>" xml-out)
       (with-out-file (tok-out (strcat file ".tok"))
@@ -122,3 +126,16 @@
                   (+ beg (- (- end beg) (length word)))
                   end #\Tab word))))
     (rename-file outfile file)))
+
+(defun validate-annotations (file)
+  (assert (ends-with ".ann" (princ-to-string file)))
+  (let ((text (read-file (fmt "~A.txt" (substr (princ-to-string file) 0 -4))))
+        (i 1))
+    (dolines (line file)
+      (with (((tn ner beg end &rest word) (split-if 'white-char-p line))
+             (expected (strjoin #\Space word))
+             (actual (slice text (parse-integer beg) (parse-integer end))))
+        (unless (string= actual expected)
+          (format t "~A:~A - ~A - ~A~%" file i expected actual)))
+      (:+ i)))
+  (format t ".~%"))
