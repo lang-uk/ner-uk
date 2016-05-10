@@ -16,7 +16,7 @@ do
                 echo $(date -u +"%Y-%m-%dT%H:%M:%SZ") $dir1 $dir2 $file.ann $result >> check_log.txt                
                 if [ $result -eq 0 ]
                 then
-                    awk 'BEGIN {i = 1} {if ($1 != "#") { print "T" i $0; i++}}' $file.ann > $file.ann.2
+                    awk 'BEGIN {i = 1} {if ($1 != "#") { print "T" i "	" $0; i++}}' $file.ann > $file.ann.2
                     mv $file.ann.2 $file.ann
                 elif [ $result -eq 1 ]
                 then
