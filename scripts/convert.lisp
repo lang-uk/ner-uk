@@ -22,7 +22,7 @@
                (uid (getset# (? user "username") users (:+ uid)))
                (text (? answer "text"))
                (sent-spans (? answer "sentence_offsets"))
-               (id (? task "id")))
+               (id (? answer "file_id")))
           (ensure-directories-exist (fmt "~A~A/" dir uid))
           (with-out-file (out (fmt "~A~A/~A.ann" dir uid id))
             (dolist (ner (sort (? answer "entities") '< :key ^(? % 2 0 0)))
@@ -38,19 +38,21 @@
                 (when (> sent1 sent0)
                   (:= (? sent-spans sent0) (list sent-beg sent-end))
                   (removef sent-spans (? sent-spans sent1) :test 'equalp))
-                (:= beg (- end beg (length name)))
+                (:- beg (- end beg (length name)))
                 (format out "# ~A[[~A]]~A~%~A	~A ~A ~A	~A~%"
-                        (slice text (or (position #\Space text
-                                                  :start (max (- beg offset)
-                                                              sent-beg)
-                                                  :end beg)
+                        (slice text (or (position-if ^(member % '(#\Space #\Newline))
+                                                     text
+                                                     :start (max (- beg offset)
+                                                                 sent-beg)
+                                                     :end beg)
                                         beg)
                                beg)
                         name
                         (slice text end
-                               (or (position #\Space text
-                                             :from-end t :start end
-                                             :end (min (+ end offset) sent-end))
+                               (or (position-if ^(member % '(#\Space #\Newline))
+                                                text :from-end t
+                                                :start end
+                                                :end (min (+ end offset) sent-end))
                                    end))
                         id type (+ beg sent0) (+ end sent1) name))))
           (dolist (outfile (list (fmt "~A~A/~A.txt" dir uid id)
@@ -113,18 +115,20 @@
                         xml-out))))
       (write-line "</body></root>" xml-out))))
 
-(defun clean-up (file)
+(defun clean-up (file &key (dir :left))
   (let ((outfile (fmt "~A.2" file)))
     (with-out-file (out outfile)
       (dolines (line file)
-        (with (((tn ner beg end &rest word) (split-if 'white-char-p line))
-               (word (strjoin #\Space word))
+        (with (((tn ner beg end &rest words) (split-if 'white-char-p line))
+               (words (strjoin #\Space words))
                (beg (parse-integer beg))
-               (end (parse-integer end)))
+               (end (parse-integer end))
+               (fix (- (- end beg) (length words))))
           (format out "~A~C~A ~A ~A~C~A~%"
                   tn #\Tab ner
-                  (+ beg (- (- end beg) (length word)))
-                  end #\Tab word))))
+                  (ecase dir (:left (- beg fix)) (:right beg))
+                  (ecase dir (:left end) (:right (- end fix)))
+                  #\Tab words))))
     (rename-file outfile file)))
 
 (defun validate-annotations (file)
