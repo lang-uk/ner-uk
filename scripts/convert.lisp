@@ -40,19 +40,18 @@
                   (removef sent-spans (? sent-spans sent1) :test 'equalp))
                 (:- beg (- end beg (length name)))
                 (format out "# ~A[[~A]]~A~%~A	~A ~A ~A	~A~%"
-                        (slice text (or (position-if ^(member % '(#\Space #\Newline))
-                                                     text
-                                                     :start (max (- beg offset)
-                                                                 sent-beg)
-                                                     :end beg)
-                                        beg)
-                               beg)
+                        (substitute #\Space #\Newline
+                                    (slice text (1+ (or (position #\Space text
+                                                                  :start (max (- beg offset)
+                                                                              sent-beg)
+                                                                  :end beg)
+                                                        (1- beg)))
+                                           beg))
                         name
                         (slice text end
-                               (or (position-if ^(member % '(#\Space #\Newline))
-                                                text :from-end t
-                                                :start end
-                                                :end (min (+ end offset) sent-end))
+                               (or (position #\Space text :from-end t
+                                             :start end
+                                             :end (min (+ end offset) sent-end))
                                    end))
                         id type (+ beg sent0) (+ end sent1) name))))
           (dolist (outfile (list (fmt "~A~A/~A.txt" dir uid id)
@@ -115,7 +114,7 @@
                         xml-out))))
       (write-line "</body></root>" xml-out))))
 
-(defun clean-up (file &key (dir :left))
+(defun clean-up (file &key (dir :left) move)
   (let ((outfile (fmt "~A.2" file)))
     (with-out-file (out outfile)
       (dolines (line file)
@@ -126,8 +125,10 @@
                (fix (- (- end beg) (length words))))
           (format out "~A~C~A ~A ~A~C~A~%"
                   tn #\Tab ner
-                  (ecase dir (:left (- beg fix)) (:right beg))
-                  (ecase dir (:left end) (:right (- end fix)))
+                  (if move (+ beg move)
+                      (ecase dir (:left (- beg fix)) (:right beg)))
+                  (if move (+ end move)
+                      (ecase dir (:left end) (:right (- end fix))))
                   #\Tab words))))
     (rename-file outfile file)))
 
