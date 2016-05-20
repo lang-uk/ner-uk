@@ -22,7 +22,8 @@
                (uid (getset# (? user "username") users (:+ uid)))
                (text (? answer "text"))
                (sent-spans (? answer "sentence_offsets"))
-               (id (? answer "file_id")))
+               (id (? answer "file_id"))
+               (extra-offset 0))
           (ensure-directories-exist (fmt "~A~A/" dir uid))
           (with-out-file (out (fmt "~A~A/~A.ann" dir uid id))
             (dolist (ner (sort (? answer "entities") '< :key ^(? % 2 0 0)))
@@ -37,6 +38,7 @@
                      (name (slice text beg end)))
                 (when (> sent1 sent0)
                   (:= (? sent-spans sent0) (list sent-beg sent-end))
+                  (:+ extra-offset)
                   (removef sent-spans (? sent-spans sent1) :test 'equalp))
                 (:- beg (- end beg (length name)))
                 (format out "# ~A[[~A]]~A~%~A	~A ~A ~A	~A~%"
@@ -53,7 +55,9 @@
                                              :start end
                                              :end (min (+ end offset) sent-end))
                                    end))
-                        id type (+ beg sent0) (+ end sent1) name))))
+                        id type
+                        (+ beg sent0 extra-offset) (+ end sent1 extra-offset)
+                        name))))
           (dolist (outfile (list (fmt "~A~A/~A.txt" dir uid id)
                                  (fmt "~A~A.txt" dir id)))
             (with-out-file (out outfile)
