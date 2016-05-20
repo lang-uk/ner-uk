@@ -74,7 +74,7 @@
         :regex (re:create-scanner
                 (strcat
                  ;; urls
-                 "\\w+://\\S+"
+                 "\\w+://(?:[a-zA-Z]|[0-9]|[$-_@.&+])+"
                  ;; emails
                  "|[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+"
                  ;; 90-х etc.
@@ -82,9 +82,9 @@
                  ;; decimals & ranges
                  "|[+-]?[0-9](?:[0-9,.-]*[0-9])?"
                  ;; regular words
-                 "|[\\w]([\\w'’`-]?[\\w]+)*"
+                 "|[\\w](?:[\\w'’`-]?[\\w]+)*"
                  ;; abbreviations
-                 "|\\w.(\\w.)+\\w?"
+                 "|\\w.(?:\\w.)+\\w?"
                  ;; punctuation & special symbols
                  "|[\"#$%&*+,/:;<=>@^`~…\\(\\)⟨⟩{}\\[\\|\\]‒–—―«»“”‘’'№]"
                  ;; closing punctuation
@@ -127,18 +127,19 @@
                (beg (parse-integer beg))
                (end (parse-integer end))
                (expected (strjoin #\Space words))
-               (actual (slice text beg end)))
+               (actual (slice text beg end))
+               (k 40))
           (unless (string= expected actual)
             (block outer
-              (dotimes (i 11)
-                (dotimes (j 11)
+              (dotimes (i k)
+                (dotimes (j k)
                   (when (ignore-errors
                          (string= expected
                                   (slice text
-                                         (+ beg (- i 6))
-                                         (+ end (- j 6)))))
-                    (:+ beg (- i 6))
-                    (:+ end (- j 6))
+                                         (+ beg (- i (/ k 2)))
+                                         (+ end (- j (/ k 2))))))
+                    (:+ beg (- i (/ k 2)))
+                    (:+ end (- j (/ k 2)))
                     (return-from outer))))))
           (format out "~A~C~A ~A ~A~C~A~%"
                   tn #\Tab ner beg end #\Tab expected))))
