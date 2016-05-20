@@ -118,22 +118,30 @@
                         xml-out))))
       (write-line "</body></root>" xml-out))))
 
-(defun clean-up (file &key (dir :left) move)
-  (let ((outfile (fmt "~A.2" file)))
+(defun clean-up (file)
+  (let ((text (read-file (fmt "~A.txt" (substr (princ-to-string file) 0 -4))))
+        (outfile (fmt "~A.2" file)))
     (with-out-file (out outfile)
       (dolines (line file)
         (with (((tn ner beg end &rest words) (split-if 'white-char-p line))
-               (words (strjoin #\Space words))
                (beg (parse-integer beg))
                (end (parse-integer end))
-               (fix (- (- end beg) (length words))))
+               (expected (strjoin #\Space words))
+               (actual (slice text beg end)))
+          (unless (string= expected actual)
+            (block outer
+              (dotimes (i 11)
+                (dotimes (j 11)
+                  (when (ignore-errors
+                         (string= expected
+                                  (slice text
+                                         (+ beg (- i 6))
+                                         (+ end (- j 6)))))
+                    (:+ beg (- i 6))
+                    (:+ end (- j 6))
+                    (return-from outer))))))
           (format out "~A~C~A ~A ~A~C~A~%"
-                  tn #\Tab ner
-                  (if move (+ beg move)
-                      (ecase dir (:left (- beg fix)) (:right beg)))
-                  (if move (+ end move)
-                      (ecase dir (:left end) (:right (- end fix))))
-                  #\Tab words))))
+                  tn #\Tab ner beg end #\Tab expected))))
     (rename-file outfile file)))
 
 (defun validate-annotations (file)
