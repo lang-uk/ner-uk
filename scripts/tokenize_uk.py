@@ -12,14 +12,11 @@ import re
 
 def tokenize_text(str):
     rez = []
-    for par in str.split('\n'):
-        p = []
-        for sent in tokenize_sents(str):
-            s = []
-            for w in tokenize_words(str):
-                s.append(w)
-            p.append(p)
-        rez.append(p)
+    for part in str.split('\n'):
+        par = []
+        for sent in tokenize_sents(part):
+            par.append(tokenize_words(str))
+        rez.append(par)
     return rez
 
 ABBRS = """
