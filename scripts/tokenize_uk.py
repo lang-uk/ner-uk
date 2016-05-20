@@ -61,7 +61,8 @@ def tokenize_sents(str):
 
     return rez
 
-WORD_TOKENIZATION_RULES = re.compile(r"""\w+://(?:[a-zA-Z]|[0-9]|[$-_@.&+])+
+WORD_TOKENIZATION_RULES = re.compile(r"""
+\w+://(?:[a-zA-Z]|[0-9]|[$-_@.&+])+
 |[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+
 |[0-9]+-[а-яА-ЯіїІЇ'’`]+
 |[+-]?[0-9](?:[0-9,.-]*[0-9])?
@@ -69,7 +70,8 @@ WORD_TOKENIZATION_RULES = re.compile(r"""\w+://(?:[a-zA-Z]|[0-9]|[$-_@.&+])+
 |\w.(?:\\w.)+\w?
 |["#$%&*+,/:;<=>@^`~…\\(\\)⟨⟩{}\[\|\]‒–—―«»“”‘’'№]
 |[.!?]+
-|-+""", re.X)
+|-+
+""", re.X)
 
 def tokenize_words(str):
     return re.findall(WORD_TOKENIZATION_RULES, str)
