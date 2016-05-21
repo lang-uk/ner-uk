@@ -6,10 +6,10 @@
   (ql:quickload :cl-nlp)
   (use-package :rutilsx)
   (use-package :ncore)
-  (use-package :nutil)
-  (use-package :should-test))
+  (use-package :nutil))
 
 (named-readtables:in-readtable rutilsx:rutilsx-readtable)
+
 
 (defun json->ann (json-file dir &key (offset 40))
   (unless (ends-with "/" dir)
@@ -38,7 +38,7 @@
                      (name (slice text beg end)))
                 (when (> sent1 sent0)
                   (:= (? sent-spans sent0) (list sent-beg sent-end))
-                  (:+ extra-offset)
+                  (:+ extra-offset (- sent1 sent0))
                   (removef sent-spans (? sent-spans sent1) :test 'equalp))
                 (:- beg (- end beg (length name)))
                 (format out "# ~A[[~A]]~A~%~A	~A ~A ~A	~A~%"
@@ -56,12 +56,13 @@
                                              :end (min (+ end offset) sent-end))
                                    end))
                         id type
-                        (+ beg sent0 extra-offset) (+ end sent1 extra-offset)
+                        (+ beg sent0 extra-offset)
+                        (+ end sent1 (- extra-offset (- sent1 sent0)))
                         name))))
           (dolist (outfile (list (fmt "~A~A/~A.txt" dir uid id)
                                  (fmt "~A~A.txt" dir id)))
             (with-out-file (out outfile)
-              ;; (write-line text out)))
+              (write-line text out)))
               (dolist (span sent-spans)
                 (write-line (slice text (? span 0) (? span 1)) out)))))))
     (with-out-file (out (fmt "~Aannotators.txt" dir))
@@ -157,3 +158,4 @@
           (format t "~A:~A - ~A - ~A~%" file i expected actual)))
       (:+ i)))
   (format t ".~%"))
+

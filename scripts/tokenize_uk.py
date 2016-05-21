@@ -50,7 +50,7 @@ def tokenize_sents(str):
             rez.append(str[off:spans[i].end()])
         elif tok[-1] in ['.', '!', '?', '…', '»']:
             tok1 = tok[re.search('[.!?…»]', tok).start()]
-            next_tok = str[spans[i+1].begin():spans[i+1].end()]
+            next_tok = str[spans[i+1].start():spans[i+1].end()]
             if (next_tok[0].isupper()
                 and not tok1.isupper()
                 and not (not tok[-1] == '.'
