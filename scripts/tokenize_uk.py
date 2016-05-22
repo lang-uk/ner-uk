@@ -10,12 +10,12 @@
 import sys
 import re
 
-def tokenize_text(str):
+def tokenize_text(string):
     rez = []
-    for part in str.split('\n'):
+    for part in string.split('\n'):
         par = []
         for sent in tokenize_sents(part):
-            par.append(tokenize_words(str))
+            par.append(tokenize_words(string))
         rez.append(par)
     return rez
 
@@ -35,9 +35,9 @@ ABBRS = """
 м.
 """.strip().split()
 
-def tokenize_sents(str):
+def tokenize_sents(string):
     spans = []
-    for match in re.finditer('[^\s]+', str):
+    for match in re.finditer('[^\s]+', string):
         spans.append(match)
     spans_count = len(spans)
 
@@ -45,19 +45,19 @@ def tokenize_sents(str):
     off = 0
 
     for i in range(spans_count):
-        tok = str[spans[i].start():spans[i].end()]
+        tok = string[spans[i].start():spans[i].end()]
         if i == spans_count - 1:
-            rez.append(str[off:spans[i].end()])
+            rez.append(string[off:spans[i].end()])
         elif tok[-1] in ['.', '!', '?', '…', '»']:
             tok1 = tok[re.search('[.!?…»]', tok).start()]
-            next_tok = str[spans[i+1].start():spans[i+1].end()]
+            next_tok = string[spans[i+1].start():spans[i+1].end()]
             if (next_tok[0].isupper()
                 and not tok1.isupper()
                 and not (not tok[-1] == '.'
                          or (tok1[0] == '('
                              or tok in ABBRS))):
-                rez.append(str[off:spans[i].end()])
-                off = spans[i+1][0]
+                rez.append(string[off:spans[i].end()])
+                off = spans[i+1].end()
 
     return rez
 
@@ -73,8 +73,8 @@ WORD_TOKENIZATION_RULES = re.compile(r"""
 |-+
 """, re.X)
 
-def tokenize_words(str):
-    return re.findall(WORD_TOKENIZATION_RULES, str)
+def tokenize_words(string):
+    return re.findall(WORD_TOKENIZATION_RULES, string)
     
 if __name__ == '__main__':
     if len(sys.argv) < 2:
