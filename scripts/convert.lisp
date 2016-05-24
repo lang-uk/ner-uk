@@ -119,7 +119,7 @@
                         xml-out))))
       (write-line "</body></root>" xml-out))))
 
-(defun clean-up (file)
+(defun clean-up (file &optional (k 10))
   (let ((text (read-file (fmt "~A.txt" (substr (princ-to-string file) 0 -4))))
         (outfile (fmt "~A.2" file)))
     (with-out-file (out outfile)
@@ -128,8 +128,7 @@
                (beg (parse-integer beg))
                (end (parse-integer end))
                (expected (strjoin #\Space words))
-               (actual (slice text beg end))
-               (k 40))
+               (actual (slice text beg end)))
           (unless (string= expected actual)
             (block outer
               (dotimes (i k)
