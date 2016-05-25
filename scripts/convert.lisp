@@ -147,6 +147,7 @@
 
 (defun validate-annotations (file)
   (assert (ends-with ".ann" (princ-to-string file)))
+  (format t "~A~%" file)
   (let ((text (read-file (fmt "~A.txt" (substr (princ-to-string file) 0 -4))))
         (i 1))
     (dolines (line file)
@@ -155,6 +156,5 @@
              (actual (slice text (parse-integer beg) (parse-integer end))))
         (unless (string= actual expected)
           (format t "~A:~A - ~A - ~A~%" file i expected actual)))
-      (:+ i)))
-  (format t ".~%"))
+      (:+ i))))
 

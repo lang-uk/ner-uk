@@ -26,7 +26,7 @@ def update_annotations_in_file(path, filename):
             annotation["end"] = int(start_end[2])
             annotations.append(annotation)
     # assume that tokenized file has structure where position of words always >= from position in original file
-    # because of additional spcaces and linebreaks
+    # because of additional spaces and linebreaks
     content = ""
     with open(path + "\\" + filename + ".txt", "r", encoding="utf-8")  as txt_f:
         content = txt_f.read()
