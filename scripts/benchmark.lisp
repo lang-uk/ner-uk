@@ -40,7 +40,7 @@
 (defstruct (ent (:print-object (lambda (obj stream)
                                  (format stream "<~@[~A ~]~A:~A ~A>"
                                          @obj.tag @obj.beg @obj.end @obj.text))))
-  tag beg end wc text)
+  tag beg end (wc 1) text)
 
 (defun to-ent (str)
   (with (((_ tag beg end &rest ent) (split-if 'white-char-p str)))
@@ -56,22 +56,23 @@
         0
         (float (/ (* 2 prec rec) div)))))
 
-(defun add-words (ent tag begs)
-  (let ((beg 0))
-    (dolist (word (split #\Space @ent.text))
-      (set# (+ @ent.beg beg) begs (pair ent tag))
-      (:+ beg (1+ (length word))))))
+(defun add-words (ent tag begs &key bare)
+  (let ((beg 0)
+        (words (split #\Space @ent.text)))
+    (when (rest words)
+      (dolist (word words)
+        (set# (+ @ent.beg beg) begs (pair (if bare (make-ent :text word) ent) tag))
+        (:+ beg (1+ (length word)))))))
 
-(defun benchmark (gold-dir test-dir &key only-files verbose only-tag)
+(defun benchmark (gold-dir test-dir &key only-files only-tag)
   (let ((total-gold 0.0)
         (total-test 0.0)
-        (conf-mat #h(equal))
+        (conf-mat0 #h(equalp))
+        (conf-mat1 #h(equalp))
         tps1 tps2 tps3)
     (dolist (gold-file (directory (strcat gold-dir "*.ann")))
       (when (or (null only-files)
                 (member (pathname-name gold-file) only-files :test 'string=))
-        (when verbose
-          (princ gold-file) (terpri))
         (with ((gold (pairs->ht (mapcar 'to-ent
                                         (split #\Newline (read-file gold-file)
                                                :remove-empty-subseqs t))
@@ -92,28 +93,25 @@
             (dotable (ent tag test)
               (unless (eql tag only-tag)
                 (rem# ent test))))
-          (when verbose
-            (print gold)
-            (print test))
           ;; match full
           (let ((cur-begs #h()))
             (dotable (ent tag gold)
-              (:+ (get# (pair tag :gold) conf-mat 0))
+              (:+ (get# (pair tag :gold) conf-mat0 0))
+              (:+ (get# (pair tag :gold) conf-mat1 0))
               (if-it (? test ent)
-                     (if (eql tag it)
-                         (progn
-                           (when verbose (print ent))
+                     (progn
+                       (if (eql tag it)
                            (push ent tps1)
-                           (:+ (get# (pair tag tag) conf-mat 0)))
-                         (progn
-                           (push (pair ent it) tps2)
-                           (:+ (get# (pair tag it) conf-mat 0))))
+                           (push (pair ent it) tps2))
+                       (:+ (get# (pair tag it) conf-mat0 0))
+                       (:+ (get# (pair tag it) conf-mat1 0)))
                      (add-words ent tag cur-begs)))
             (push cur-begs gold-begs))
           (let ((cur-begs #h()))
             (dotable (ent tag test)
-              (:+ (get# (pair tag :test) conf-mat 0))
-              (add-words ent tag cur-begs))
+              (:+ (get# (pair tag :test) conf-mat0 0))
+              (:+ (get# (pair tag :test) conf-mat1 0))
+              (add-words ent tag cur-begs :bare t))
             (push cur-begs test-begs))
           ;; match part
           (dolist (cur-begs test-begs)
@@ -125,54 +123,48 @@
               (when part-tps
                 (push part-tps tps3))))
           (:+ total-gold (ht-count gold))
-          (:+ total-test (ht-count test)))
-        (when verbose
-          (print (list (length tps1) (length tps2) (length tps3)))
-          (break))))
+          (:+ total-test (ht-count test)))))
     ;; calc stats
     (with ((tp1 (length tps1))
            (tp2 (length tps2))
-           (prec  (/ tp1 total-test))
-           (rec   (/ tp1 total-gold))
-           (prec2 (/ (+ tp1 tp2) total-test))
-           (rec2  (/ (+ tp1 tp2) total-gold))
            (tp3 0)
-           (tp4 0))
+           (tp4 0)
+           (prec1 (/ tp1 total-test))
+           (rec1  (/ tp1 total-gold))
+           (prec2 (/ (+ tp1 tp2) total-test))
+           (rec2  (/ (+ tp1 tp2) total-gold)))
       ;; partial matches
       (dolist (tps tps3)
         (dolist (tp tps)
           (with ((((g-ent g-tag) (t-ent t-tag)) tp)
-                 (match% (/ (abs (- @g-ent.wc @t-ent.wc))
-                            @g-ent.wc)))
+                 (match% (- 1 (/ (abs (- @g-ent.wc @t-ent.wc))
+                                 @g-ent.wc))))
+;            (break "~A ~A: ~A" g-ent t-ent match%)
             (if (eql g-tag t-tag)
-                (progn
-                  (:+ tp3 match%)
-                  (:+ (get# (pair g-tag g-tag) conf-mat 0) match%))
-                (progn
-                  (:+ tp4 match%)
-                  (:+ (get# (pair g-tag t-tag) conf-mat 0) match%))))))
+                (:+ tp3 match%)
+                (:+ tp4 match%))
+            (:+ (get# (pair g-tag t-tag) conf-mat1 0) match%))))
       (let ((prec3 (/ (+ tp1 tp3) total-test))
             (rec3  (/ (+ tp1 tp3) total-gold))
             (prec4 (/ (+ tp1 tp2 (length tps3)) total-test))
             (rec4  (/ (+ tp1 tp2 tp3 tp4) total-gold)))
-        (print-conf-mat conf-mat)
-        (values #h(:prec-full-match prec
-                   :rec-full-match rec
-                   :f1-full-match (f1 prec rec)
-                   
-                   :prec-full-match-no-tags prec2
-                   :rec-full-match-no-tags rec2
-                   :f1-full-match-no-tags (f1 prec2 rec2)
-                   
-                   :prec-part-match prec3
-                   :rec-part-match rec3
-                   :f1-part-match (f1 prec3 rec3)
-                   
-                   :prec-part-match-no-tags prec4
-                   :rec-part-match-no-tags rec4
-                   :f1-part-match-no-tags (f1 prec4 rec4))
-                conf-mat
+        (values #h(:prec-1 prec1
+                   :rec-1 rec1
+                   :f1-1 (f1 prec1 rec1)
+                   :prec-2 prec2
+                   :rec-2 rec2
+                   :f1-2 (f1 prec2 rec2)
+                   :prec-3 prec3
+                   :rec-3 rec3
+                   :f1-3 (f1 prec3 rec3)
+                   :prec-4 prec4
+                   :rec-4 rec4
+                   :f1-4 (f1 prec4 rec4))
+                (list conf-mat0 conf-mat1)
                 (list tps1 tps2 tps3))))))
+
+
+;;; pretty printing
 
 (defun fmt-int-or-float (num)
   (typecase num
@@ -201,3 +193,12 @@
                 (fmt-int-or-float (- total-cnt matches-cnt))
                 (mapcar ^(fmt-int-or-float (get# (pair % test-tag) conf-mat 0))
                         tags))))))
+
+(defun print-benchmark (gold-dir test-dir)
+  (with ((qs ms (benchmark gold-dir test-dir :only-files *test-data*)))
+    (loop :for (k v) :in (sort (ht->pairs qs) '<
+                               :key ^(char-code (last-char (string (lt %))))) :do
+      (format t "~:(~A~): ~5,F~%" k v))
+    (doindex (i m ms)
+      (format t "~%Confusion matrix ~A:~%~%" (1+ i))
+      (print-conf-mat m))))
