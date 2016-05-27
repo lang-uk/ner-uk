@@ -60,7 +60,7 @@ def update_annotations_in_file(path, filename):
                         else: break
                 ann["start"] = newStart
                 ann["end"] = newEnd
-                ann["text"] = content[newStart:newEnd]
+                ann["text"] = content[newStart:newEnd].strip()
                 break
 
     # and save result
