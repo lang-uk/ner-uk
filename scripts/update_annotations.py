@@ -20,6 +20,7 @@ def update_annotations_in_file(path, filename):
             ann_row = ann_l.split("\t")
             annotation = {}
             annotation["row"] = ann_row
+            annotation["text"] = ann_row[2].strip("\n")
             start_end = ann_row[1].split(' ')
             annotation["type"] = start_end[0]
             annotation["start"] = int(start_end[1])
@@ -31,44 +32,35 @@ def update_annotations_in_file(path, filename):
     with open(path + "\\" + filename + ".txt", "r", encoding="utf-8")  as txt_f:
         content = txt_f.read()
 
-
-    url_re1 = re.compile(r"([a-zA-Z]+) . ([a-zA-Z]+)", re.IGNORECASE)
-    url_re2 = re.compile(r"([a-zA-Z]+) . ([a-zA-Z]+) . ([a-zA-Z]+)", re.IGNORECASE)
-    open_re = re.compile(r"([\(«“]) ", re.IGNORECASE)
-    close_re = re.compile(r" ([:\)».,?”])", re.IGNORECASE)
-    defis_re = re.compile(r" ([\u2013\-\+]) ", re.IGNORECASE)
-    defis2_re = re.compile(r" ([\u2013\-\+])", re.IGNORECASE)
-    double_space_re = re.compile(r"  ", re.IGNORECASE)
-    ck_re = re.compile(r"П \(б\)\s?(У)?", re.IGNORECASE)
-    names2_re = re.compile(r"([А-Я])\. ([А-Я])\. ([А-Я])")
-    names_re = re.compile(r"([А-Я])\. ([А-Я])")
     for ann in annotations:
-        # first need to clean tokenized annotation from spaces
-        text = url_re1.sub("\g<1>.\g<2>", ann["row"][2])
-        text = url_re2.sub("\g<1>.\g<2>.\g<3>", text)
-        text = double_space_re.sub(" ", text)
-        text = open_re.sub("\g<1>", text)
-        text = close_re.sub("\g<1>", text)
-        text = defis_re.sub("\g<1>", text)
-        text = defis2_re.sub("\g<1>", text)
-        text = ck_re.sub("П(б)\g<1>", text)
-        text = names_re.sub("\g<1>.\g<2>", text)
-        text = names2_re.sub("\g<1>.\g<2>.\g<3>", text)
-        text = double_space_re.sub(" ", text)
-        text = text.strip()
+        missed_re = re.compile(r"[\[\]‐\s\-№]", re.IGNORECASE)
+        # first clean tokenized annotation from spaces
+        text = missed_re.sub("", ann["row"][2])
         # then go back from tokenized start position
-        length = len(text)
+        length = len(ann["row"][2]) + 3 # to be sure
+        missed_simbols = " []-‐№"
         for i in itertools.count():
             newStart = ann["start"] - i
             if(newStart < 0):
-                #raise NameError("Token {0} not found in file {1}!".format(text, filename))
-                print("Token {0} not found in file {1}!".format(text, filename))
+                print("Token {0} not found in file {1}!".format(ann["row"][2].strip(), filename))
                 break
             newEnd = newStart + length
-            if(content[newStart:newEnd].strip() == text):
+
+            # clean original text from spaces
+            original_text_escaped = missed_re.sub("", content[newStart:newEnd])
+            position = original_text_escaped.find(text)
+            if(position == 0):
+                # now fix position by restoring spaces
+                original_text = content[newStart:newEnd]
+                newEnd = newStart + len(text)
+                for i in range(len(original_text)):
+                    if(original_text[i] in missed_simbols):
+                        if(i <= newEnd-newStart-1):
+                            newEnd = newEnd + 1
+                        else: break
                 ann["start"] = newStart
                 ann["end"] = newEnd
-                ann["text"] = text
+                ann["text"] = content[newStart:newEnd].strip()
                 break
 
     # and save result
