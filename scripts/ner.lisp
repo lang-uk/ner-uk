@@ -27,58 +27,6 @@
   (ner :рег))
 
 
-;;; tagger
-
-(defclass ap-nertagger (avg-perceptron tagger)
-  ()
-  (:documentation
-   ""))
-
-(defmacro with-nertagger-init ((tagger sentence) &body body)
-  `(let ((ctx #h(:sent
-                 (make-array (+ 4 (length (sent-tokens ,sentence)))
-                             :initial-contents
-                             (append (mapcar ^(make-entity :word "" :ner %)
-                                             '(:-start2- :-start-))
-                                     (sent-tokens ,sentence)
-                                     (mapcar ^(make-entity :word "" :ner %)
-                                             '(:-end- :-end2-)))))))
-     (:= (? ctx :prev) :-start-
-         (? ctx :prev2) :-start2-)
-     ,@body))
-
-(defmethod tag ((tagger ap-nertagger) (sentence sentence))
-  (with-nertagger-init (tagger sentence)
-    (doindex (i token @sentence.tokens)
-      (:= @token.ner (classify tagger (extract-fs tagger (+ i 2) ctx))))
-    sentence))
-
-(defmethod train ((model ap-nertagger) sents &key (epochs 5) verbose)
-  (training-perceptron (sent sents epochs verbose c n)
-    (with-nertagger-init (model sent)
-      (doindex (i token @sent.tokens)
-        (with ((fs (extract-fs model (+ i 2) ctx))
-               (guess (classify model fs)))
-          (train1 model @token.ner guess (rest fs))
-          (:= (? ctx :prev2) (? ctx :prev)
-              (? ctx :prev) guess)
-          (switch (@token.word#0 :test 'member)
-            (+open-quote-chars+ (:= (? ctx :quoted) t))
-            (+close-quote-chars+ (:= (? ctx :quoted) nil)))
-          (when verbose
-            (:+ c (if (eql guess @token.ner) 1 0))
-            (:+ n))))))
-  model)
-
-(defun latin-char-p (char)
-  (and (member char
-               (load-time-value
-                (append (loop :for ch :from (char-code #\a) :to (char-code #\z)
-                              :collect (code-char ch))
-                        (loop :for ch :from (char-code #\A) :to (char-code #\Z)
-                              :collect (code-char ch)))))
-       t))
-
 ;;; data
 
 (with ((dev-test (split #\Newline (read-file "../doc/dev-test-split.txt")
@@ -139,7 +87,7 @@
                   data)
          :verbose t :epochs epochs))
 
-(defun test-ner (ners dir)
+(defun test-ner (ners dir gold-dir)
   (ensure-directories-exist dir)
   (dolist (file *test-data*)
     (with-out-file (out (fmt "../data/~A.ann" file))

@@ -176,6 +176,7 @@
   (let (tags)
     (dotable (k _ conf-mat)
       (pushnew (lt k) tags))
+    (:= tags (safe-sort tags '< :key ^(get# (pair % %) conf-mat 0)))
     (format t "        ~C~{~8<~A~>~}~%" #\Tab (cons nil tags))
     (format t "~8<~A~>~C        ~{~8A~}~%" nil #\Tab
             (mapcar (lambda (tag)
@@ -184,7 +185,7 @@
                            (reduce '+ (mapcar ^(get# (pair tag %) conf-mat 0)
                                               tags)))))
                     tags))
-    (dolist (test-tag (safe-sort tags '< :key ^(get# (pair % %) conf-mat 0)))
+    (dolist (test-tag tags)
       (let ((total-cnt (get# (pair test-tag :test) conf-mat 0))
             (matches-cnt (reduce '+ (mapcar ^(get# (pair % test-tag) conf-mat 0)
                                             tags))))
@@ -194,11 +195,20 @@
                 (mapcar ^(fmt-int-or-float (get# (pair % test-tag) conf-mat 0))
                         tags))))))
 
+(with ((dev-test (split #\Newline (read-file "../doc/dev-test-split.txt")
+                        :remove-empty-subseqs t)))
+  (defparameter *dev-data*
+    (sub dev-test (1+ (position "DEV" dev-test :test 'string=))
+         (position "TEST" dev-test :test 'string=)))
+  (defparameter *test-data*
+    (sub dev-test (1+ (position "TEST" dev-test :test 'string=)))))
+
+
 (defun print-benchmark (gold-dir test-dir)
   (with ((qs ms (benchmark gold-dir test-dir :only-files *test-data*)))
     (loop :for (k v) :in (sort (ht->pairs qs) '<
                                :key ^(char-code (last-char (string (lt %))))) :do
-      (format t "~:(~A~): ~5,F~%" k v))
+      (format t "~:(~A~): ~5,3F~%" k v))
     (doindex (i m ms)
       (format t "~%Confusion matrix ~A:~%~%" (1+ i))
       (print-conf-mat m))))

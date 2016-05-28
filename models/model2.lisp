@@ -23,7 +23,7 @@
     (with (((i ctx) args)
            (((sent :sent) (prev-ner :prev) (prev2-ner :prev2) (quoted :quoted))
             ? ctx)
-           ((prev2 prev cur next next2) (mapcar ^(? sent i)
+           ((prev2 prev cur next next2) (mapcar ^(? sent %)
                                                 (range (- i 2) (+ i 3)))))
       (cons @cur.word
             (append (make-fs ("i sent-beg" (= i 2))
