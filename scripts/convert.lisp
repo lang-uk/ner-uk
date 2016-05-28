@@ -43,11 +43,13 @@
                 (:- beg (- end beg (length name)))
                 (format out "# ~A[[~A]]~A~%~A	~A ~A ~A	~A~%"
                         (substitute #\Space #\Newline
-                                    (slice text (1+ (or (position #\Space text
-                                                                  :start (max (- beg offset)
-                                                                              sent-beg)
-                                                                  :end beg)
-                                                        (1- beg)))
+                                    (slice text
+                                           (1+ (or (position
+                                                    #\Space text
+                                                    :start (max (- beg offset)
+                                                                sent-beg)
+                                                    :end beg)
+                                                   (1- beg)))
                                            beg))
                         name
                         (slice text end
@@ -62,7 +64,7 @@
           (dolist (outfile (list (fmt "~A~A/~A.txt" dir uid id)
                                  (fmt "~A~A.txt" dir id)))
             (with-out-file (out outfile)
-              (write-line text out)))
+              (write-line text out)
               (dolist (span sent-spans)
                 (write-line (slice text (? span 0) (? span 1)) out)))))))
     (with-out-file (out (fmt "~Aannotators.txt" dir))
@@ -147,6 +149,7 @@
 
 (defun validate-annotations (file)
   (assert (ends-with ".ann" (princ-to-string file)))
+  (format t "~A~%" file)
   (let ((text (read-file (fmt "~A.txt" (substr (princ-to-string file) 0 -4))))
         (i 1))
     (dolines (line file)
@@ -155,6 +158,5 @@
              (actual (slice text (parse-integer beg) (parse-integer end))))
         (unless (string= actual expected)
           (format t "~A:~A - ~A - ~A~%" file i expected actual)))
-      (:+ i)))
-  (format t ".~%"))
+      (:+ i))))
 
