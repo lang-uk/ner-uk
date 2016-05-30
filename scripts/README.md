@@ -2,20 +2,22 @@
 
 ## tokenize-uk.lisp
 
-Installation:
+### Installation:
 
 ```
 $ sbcl --non-interactive --eval '(compile-file "tokenize-uk--all-systems.lisp")'
 ```
 
-Usage:
+### Usage:
 
-```
-$ sbcl --script tokenize-uk--all-systems.fasl
-```
-Tokenizes text from STDIN line-by-line.
+- tokenize text from STDIN line-by-line:
 
-```
-$ sbcl --script tokenize-uk--all-systems.fasl -- file-to-tokenize
-```
-Produces file-to-tokenize.tok
+    ```
+    $ sbcl --script tokenize-uk--all-systems.fasl
+    ```
+
+- tokenize files (for each file create a corresponding .tok file):
+
+    ```
+    $ sbcl --script tokenize-uk--all-systems.fasl -- file-to-tokenize1 file-to-tokenize2 ...
+    ```
