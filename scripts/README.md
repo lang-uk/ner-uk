@@ -2,13 +2,13 @@
 
 ## tokenize-uk.lisp
 
-### Installation:
+### Installation
 
 ```
 $ sbcl --non-interactive --eval '(compile-file "tokenize-uk--all-systems.lisp")'
 ```
 
-### Usage:
+### Usage
 
 - tokenize text from STDIN line-by-line:
 
