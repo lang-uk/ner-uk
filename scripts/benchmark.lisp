@@ -203,7 +203,6 @@
   (defparameter *test-data*
     (sub dev-test (1+ (position "TEST" dev-test :test 'string=)))))
 
-
 (defun print-benchmark (gold-dir test-dir)
   (with ((qs ms (benchmark gold-dir test-dir :only-files *test-data*)))
     (loop :for (k v) :in (sort (ht->pairs qs) '<

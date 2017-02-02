@@ -95,16 +95,14 @@
                  ;; multiple dashes
                  "|-+"))))
 
-(defparameter +uk-abbrevs+
-  (list-from-file (data-file "uk/abbrevs-with-dot.txt")))
+(ncore:in-lang :uk)
 
 (defun tokenize-text (file)
-  (let ((text (read-file file))
-        (+abbrevs-with-dot+ +uk-abbrevs+))
+  (let ((text (read-file file)))
     (with-out-file (xml-out (strcat file ".xml"))
       (write-line "<root><body>" xml-out)
       (with-out-file (tok-out (strcat file ".tok"))
-        (dolist (sent (flat-map ^(tokenize <sentence-splitter> %)
+        (dolist (sent (flat-map ^(tokenize nlp:<sent-splitter> %)
                                 (split #\Newline
                                        (substr text (+ (search "<body>" text
                                                                :test 'string=)
