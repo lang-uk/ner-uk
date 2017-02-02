@@ -95,7 +95,8 @@
                  ;; multiple dashes
                  "|-+"))))
 
-(ncore:in-lang :uk)
+(eval-always (init-lang :uk))
+(in-lang :uk)
 
 (defun tokenize-text (file)
   (let ((text (read-file file)))
