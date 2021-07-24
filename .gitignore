@@ -3,5 +3,5 @@
 .*
 *.fasl
 !.gitignore
-./workspace
+/workspace
 *.pyc
