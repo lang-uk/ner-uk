@@ -14,6 +14,20 @@ Use `python3 scripts/ner_train_mitie.py -h` to print cmd line arguments.
 
 The resulting model will reside in `workspace/mitie/mitie_ner_model.dat`
 
+## Stanza
+Stanza already have almost everything that is required to train on our data set merged in.
+Some fixes are pending to be merged from `https://github.com/gawy/stanza.git --branch ner-languk-def-split` (ability to read train-test split from our file insted of random split).
+
+Run: `scripts/train_stanza_ner.sh`
+
+To use custom word vectors path it with argument `--wordvec_file`. **Stanza uses vectors of dimention `100`**.
+Vector file first must be converted to .pt format (pytorch binary format) using script from stanza `convert_pretrain.py`. More details please read [here in Stanza docs](https://stanfordnlp.github.io/stanza/word_vectors.html).
+Vector file to be converted - must start with line of format: `<word_count> <dimention [100]>`
+
+Word count can usually be obtained by `wc -l <file>`
+
+Trained model will be available under workspace/stanza folder.
+
 ## tokenize-uk.lisp
 
 ### Installation
