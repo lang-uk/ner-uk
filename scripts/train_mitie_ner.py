@@ -4,24 +4,7 @@ import argparse
 import os
 import subprocess
 import multiprocessing
-
-
-def read_train_test_split(config_path):
-    # Read dev/test split from config
-    dev_files, test_files = [], []
-    container = dev_files
-    with open(config_path, 'r') as f:
-        for ln in f:
-            ln = ln.strip()
-            if ln == 'DEV':
-                container = dev_files
-            elif ln == 'TEST':
-                container = test_files
-            elif ln == '':
-                pass
-            else:
-                container.append(ln)
-    return dev_files,test_files
+from ner_utils import read_train_test_split
 
 
 def prepare_mitie_training_data(dev_files):

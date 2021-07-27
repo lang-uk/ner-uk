@@ -8,7 +8,7 @@ Requirements:
 * For now some utilities reside in another repo which you can install via `pip3 install git+https://github.com/gawy/stanza-lang-uk.git`
 
 Run from project root
-`python3 scripts/ner_train_mitie.py`
+`python3 scripts/train_mitie_ner.py`
 
 Use `python3 scripts/ner_train_mitie.py -h` to print cmd line arguments.
 
