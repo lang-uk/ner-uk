@@ -6,6 +6,11 @@ import subprocess
 import multiprocessing
 from ner_utils import read_train_test_split
 
+"""
+Script intended to train mitie NER model using lang-uk data set in current repository.
+Run `python3 scripts/train_mitie_ner.py` from root to run with default configuration.
+Check down below in the file for all cmd line arguments.
+"""
 
 def prepare_mitie_training_data(dev_files):
     # convert char offset in ner-uk markup to token based MITIE markup

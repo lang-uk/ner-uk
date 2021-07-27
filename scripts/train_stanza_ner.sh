@@ -1,8 +1,27 @@
 #!/bin/sh
 
+# processing arguments
+
+for i in "$@"; do
+  case $i in
+    -w=*|--word_vec=*)
+      wordvec_param="${i#*=}"
+      shift # past argument=value
+      ;;
+    
+    *)
+      # unknown option
+      echo "Parameter '$i' is not supported skipping it."
+      ;;
+  esac
+done
+
+
 workspace='workspace/stanza'
 wordvec_file_name='wordvec_stanza.uk.pt'
-wordvec_path=../$wordvec_file_name #relative to stanza-git folder
+wordvec_path=${wordvec_param:-"../$wordvec_file_name"} #relative to stanza-git folder
+
+echo "Word vectors to be read from '$wordvec_path' relative to 'stanza-git' folder."
 
 if [ ! -d $workspace ]
 then
@@ -15,9 +34,9 @@ git clone https://github.com/gawy/stanza.git --branch ner-languk-def-split --sin
 pip3 install $workspace/stanza-git
 
 # download stanza pretrained vectors if those are not provided via cmd line
-if [ ! -f $workspace/$wordvec_file_name ] 
+if [ ! -f $wordvec_path ] 
 then 
-    echo "$workspace/wordvec_stanza.uk.pt not found. Trying to download."
+    echo "$wordvec_path not found. Trying to download default vectors for stanza."
     curl https://dl.dropboxusercontent.com/s/13vrv639z1u42qn/stanza-wordvec-uk.pt.zip?dl=0 --output $workspace/wordvec_stanza.uk.pt.zip
     unzip $workspace/wordvec_stanza.uk.pt.zip -d $workspace
     mv $workspace/uk.pt $workspace/$wordvec_file_name
