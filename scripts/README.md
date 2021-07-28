@@ -30,6 +30,11 @@ Word count can usually be obtained by `wc -l <file>`
 
 Trained model will be available under workspace/stanza folder.
 
+## Evaluating NER models
+Execute: `python3 scripts/eval_ner_models.py --stanza=<path_to_stanza_model> --mitie=<path_to_mitie_model>`
+
+The script will produce report with the help of sklearn classification report and will print it out to console.
+
 ## tokenize-uk.lisp
 
 ### Installation
