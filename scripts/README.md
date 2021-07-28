@@ -2,6 +2,9 @@
 
 ## Training NER models
 
+Pre-requisites
+* `pip3 install git+https://github.com/gawy/stanza-lang-uk.git mitie tqdm`
+
 ### MITIE
 Requirements:
 * trained feature extractor - binary can be obtained by running `MITIE/tools/wordrep` on data set. If not provided, script will try to download pretrained model.

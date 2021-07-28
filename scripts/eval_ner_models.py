@@ -1,7 +1,6 @@
 import argparse
 import os
 
-from scipy.sparse import data
 from ner_utils import read_data_to_iob, read_train_test_split
 import stanza
 from mitie import named_entity_extractor
