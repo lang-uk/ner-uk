@@ -3,7 +3,7 @@
 ## Training NER models
 
 Pre-requisites
-* `pip3 install git+https://github.com/gawy/stanza-lang-uk.git mitie tqdm`
+* `pip3 install -r scripts/requirements.txt`
 
 ### MITIE
 Requirements:
@@ -40,7 +40,8 @@ The script will produce report with the help of sklearn classification report an
 
 ## tokenize-uk.lisp
 
-### Installation
+
+### Installation for other scripts
 
 ```
 $ sbcl --non-interactive --eval '(compile-file "tokenize-uk--all-systems.lisp")'
