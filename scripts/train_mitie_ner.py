@@ -1,8 +1,9 @@
+import shutil
+import requests
 from bsf_beios.bsf_to_beios import BsfInfo, parse_bsf
 from mitie import *
 import argparse
 import os
-import subprocess
 import multiprocessing
 from ner_utils import read_train_test_split
 
@@ -11,6 +12,9 @@ Script intended to train mitie NER model using lang-uk data set in current repos
 Run `python3 scripts/train_mitie_ner.py` from root to run with default configuration.
 Check down below in the file for all cmd line arguments.
 """
+
+# don't include url params at the end - logic is trying to parse for extension of the file.
+feature_extractor_url = 'https://dl.dropboxusercontent.com/s/xvkc1kld424rmb1/total_word_feature_extractor.tokenized.400k.dat.zip'
 
 
 def prepare_mitie_training_data(dev_files):
@@ -36,6 +40,7 @@ def prepare_mitie_training_data(dev_files):
         for ann in annotations:
             tok_start = 0
             in_token = False
+            tok_end = 0
             for i in range(tok_idx, len(tokens)):
                 tok_idx = i + 1
                 if not in_token and ann.token.startswith(tokens[i]):
@@ -60,6 +65,13 @@ def prepare_mitie_training_data(dev_files):
     return samples
 
 
+def download_file(download_url, file_name):
+    with requests.get(download_url, stream=True) as r:
+        with open(file_name, 'wb') as f:
+            shutil.copyfileobj(r.raw, f)
+    return file_name
+
+
 def run_training(cpu_threads, config_path, feature_extractor_path):
     dev_files, test_files = read_train_test_split(config_path)
     print(f'Loaded corpus file split configuration (documents): DEV={len(dev_files)}, TEST={len(test_files)}')
@@ -77,10 +89,14 @@ def run_training(cpu_threads, config_path, feature_extractor_path):
         feature_extractor_path = os.path.join(workspace_folder, 'total_word_feature_extractor.tokenized.400k.dat')
 
         if not os.path.exists(feature_extractor_path):
-            url = 'https://dl.dropboxusercontent.com/s/87en1k1cef6wpei/total_word_feature_extractor.tokenized.400k.dat.bz2?dl=0'
-            print(f'Feature extractor file not provided or not found. \nTrying to download from {url}')
-            subprocess.run(['curl', url, '--output', feature_extractor_path + '.bz2'])
-            subprocess.run(['bzip2', '-d', feature_extractor_path + '.bz2'])
+            print(f'Feature extractor file not provided or not found. '
+                  f'\nTrying to download from {feature_extractor_url}'
+                  f'\nSorry no progress bar.')
+
+            ext = feature_extractor_url.split('.')[-1]
+            download_file(feature_extractor_url, feature_extractor_path + '.' + ext)
+            shutil.unpack_archive(feature_extractor_path + '.' + ext, workspace_folder)
+            os.remove(feature_extractor_path + '.' + ext)
 
     trainer = ner_trainer(feature_extractor_path)
 
@@ -102,9 +118,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run MITIE training process using annotated NER data from `data` '
                                                  'folder and using pretrained feature extractor')
 
-    parser.add_argument('--fte_path', type=str, help='Path to pretrained FeaTure Extractor. For instructions on how '
-                                                     'to train one - read '
-                                                     'https://github.com/mit-nlp/MITIE/blob/master/examples/python/train_ner.py. If not provided, this script will try to download some of the prior verions of it.')
+    parser.add_argument('--fte_path', type=str,
+                        help='Path to pretrained FeaTure Extractor. For instructions on how to train one - read '
+                             'https://github.com/mit-nlp/MITIE/blob/master/examples/python/train_ner.py. '
+                             'If not provided, this script will try to download some of the prior versions of it.')
     parser.add_argument('--threads', type=int, default=multiprocessing.cpu_count(),
                         help='Number of threads to use for training.')
     parser.add_argument('--split_file', type=str, default='doc/dev-test-split.txt',
