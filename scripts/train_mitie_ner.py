@@ -12,6 +12,7 @@ Run `python3 scripts/train_mitie_ner.py` from root to run with default configura
 Check down below in the file for all cmd line arguments.
 """
 
+
 def prepare_mitie_training_data(dev_files):
     # convert char offset in ner-uk markup to token based MITIE markup
     # and create MITIE samples
@@ -19,16 +20,14 @@ def prepare_mitie_training_data(dev_files):
     samples = []
     for f_name in dev_files:
         # read ann
-        with open (base_path + f_name + '.ann', 'r') as f:
+        with open(base_path + f_name + '.ann', 'r') as f:
             annotations = parse_bsf(f.read())
-             # read tokens
-        with open (base_path + f_name + '.txt', 'r') as f:
+        # read tokens
+        with open(base_path + f_name + '.txt', 'r') as f:
             tok_txt = f.read()
-    
+
         tokens = tok_txt.split()
-        #     print(annotations)
-        #     print(tokens)
-    
+
         # convert char offset to token offset
         tok_ann = []
         tok_idx = 0
@@ -38,27 +37,25 @@ def prepare_mitie_training_data(dev_files):
             tok_start = 0
             in_token = False
             for i in range(tok_idx, len(tokens)):
-                tok_idx = i + 1            
+                tok_idx = i + 1
                 if not in_token and ann.token.startswith(tokens[i]):
                     tok_start = i
                     tok_end = i + 1
                     in_token = (len(ann.token) != len(tokens[i]))
-                    # print(f't={ann.token}, tok_start={tok_start}, tok_end={tok_end}, in_token={in_token}, tok_idx={tok_idx}')
                     if len(ann.token) == len(tokens[i]):
                         break
                 elif in_token and ann.token.endswith(tokens[i]):
-                    tok_end = i+1
+                    tok_end = i + 1
                     in_token = False
                     break
             tok_ann.append(BsfInfo(ann.id, ann.tag, tok_start, tok_end, ann.token))
-        
-        # print(tok_ann)
-        # Create MITIE sample 
+
+        # Create MITIE sample
         sample = ner_training_instance(tokens)
         for t_ann in tok_ann:
             sample.add_entity(xrange(t_ann.start_idx, t_ann.end_idx), t_ann.tag)
         samples.append(sample)
-        
+
     print(f'Converted to MITIE format. Sample documents {len(samples)}')
     return samples
 
@@ -74,15 +71,14 @@ def run_training(cpu_threads, config_path, feature_extractor_path):
     if not os.path.exists(workspace_folder):
         os.makedirs(workspace_folder)
 
-
-    ## Training
+    # Training
     if not feature_extractor_path or len(feature_extractor_path.strip()) == 0:
         # try to download pretrained file
         feature_extractor_path = os.path.join(workspace_folder, 'total_word_feature_extractor.tokenized.400k.dat')
 
         if not os.path.exists(feature_extractor_path):
             url = 'https://dl.dropboxusercontent.com/s/87en1k1cef6wpei/total_word_feature_extractor.tokenized.400k.dat.bz2?dl=0'
-            print(f'Feature extractor file not provided or not found. \nTrying to dowload from {url}')
+            print(f'Feature extractor file not provided or not found. \nTrying to download from {url}')
             subprocess.run(['curl', url, '--output', feature_extractor_path + '.bz2'])
             subprocess.run(['bzip2', '-d', feature_extractor_path + '.bz2'])
 
@@ -103,11 +99,16 @@ def run_training(cpu_threads, config_path, feature_extractor_path):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Run MITIE training process using annotated NER data from `data` folder and using pretrained feature exctractor')
+    parser = argparse.ArgumentParser(description='Run MITIE training process using annotated NER data from `data` '
+                                                 'folder and using pretrained feature extractor')
 
-    parser.add_argument('--fte_path', type=str, help='Path to pretrained FeaTure Extractor. For instructions on how to train one - read https://github.com/mit-nlp/MITIE/blob/master/examples/python/train_ner.py. If not provided, this script will try to download some of the prior verions of it.')
-    parser.add_argument('--threads', type=int, default=multiprocessing.cpu_count(), help='Number of threads to use for training.')
-    parser.add_argument('--split_file', type=str, default='doc/dev-test-split.txt', help='Path to txt file with Train/Test split.')
+    parser.add_argument('--fte_path', type=str, help='Path to pretrained FeaTure Extractor. For instructions on how '
+                                                     'to train one - read '
+                                                     'https://github.com/mit-nlp/MITIE/blob/master/examples/python/train_ner.py. If not provided, this script will try to download some of the prior verions of it.')
+    parser.add_argument('--threads', type=int, default=multiprocessing.cpu_count(),
+                        help='Number of threads to use for training.')
+    parser.add_argument('--split_file', type=str, default='doc/dev-test-split.txt',
+                        help='Path to txt file with Train/Test split.')
 
     parser.print_usage()
 
@@ -115,6 +116,5 @@ if __name__ == '__main__':
 
     if not os.path.exists('data'):
         print("Error: data folder not found. Make sure you are running this script from the ner-uk project root")
-    else:  
+    else:
         run_training(args.threads, args.split_file, args.fte_path)
-
