@@ -23,11 +23,11 @@ Some fixes are pending to be merged from `https://github.com/gawy/stanza.git --b
 
 Run: `scripts/train_stanza_ner.sh`
 
-To use custom word vectors path it with argument `--word_vec` or `-w`. **Stanza uses vectors of dimention `100`**. 
+To use custom word vectors path it with argument `--word_vec` or `-w`. **Stanza uses vectors of dimension `100`**. 
 `scripts/train_stanza_ner.sh -w=path_to_your_wordvec_file`
 
 Vector file first must be converted to .pt format (pytorch binary format) using script from stanza `convert_pretrain.py`. More details please read [here in Stanza docs](https://stanfordnlp.github.io/stanza/word_vectors.html).
-Vector file to be converted - must start with line of format: `<word_count> <dimention [100]>`
+Vector file to be converted - must start with line of format: `<word_count> <dimension [100]>`
 
 Word count can usually be obtained by `wc -l <file>`
 
