@@ -42,7 +42,7 @@ pip3 install $workspace/stanza-git
 if [ ! -f "$wordvec_path" ]
 then 
     echo "$wordvec_path not found. Trying to download default vectors for stanza."
-    curl "https://dl.dropboxusercontent.com/s/13vrv639z1u42qn/stanza-wordvec-uk.pt.zip?dl=0" --output "$workspace/wordvec_stanza.uk.pt.zip"
+    curl "https://lang.org.ua/static/downloads/ner-aux/stanza-wordvec-uk.pt.zip" --output "$workspace/wordvec_stanza.uk.pt.zip"
     unzip $workspace/wordvec_stanza.uk.pt.zip -d $workspace
     mv $workspace/uk.pt $workspace/$wordvec_file_name
     rm $workspace/wordvec_stanza.uk.pt.zip

@@ -14,7 +14,7 @@ Check down below in the file for all cmd line arguments.
 """
 
 # don't include url params at the end - logic is trying to parse for extension of the file.
-feature_extractor_url = 'https://dl.dropboxusercontent.com/s/xvkc1kld424rmb1/total_word_feature_extractor.tokenized.400k.dat.zip'
+feature_extractor_url = 'https://lang.org.ua/static/downloads/ner-aux/total_word_feature_extractor.tokenized.400k.dat.zip'
 
 
 def prepare_mitie_training_data(dev_files):

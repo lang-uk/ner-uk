@@ -1,5 +1,3 @@
-
-from typing import Tuple
 from collections import namedtuple
 import os
 from bsf_beios.bsf_to_beios import convert_bsf
@@ -10,6 +8,10 @@ Markup = namedtuple('Markup', 'tag range_start range_end text')
     
 
 def read_train_test_split(config_path):
+    """
+    :param config_path: path to file with dev, test split. File containing file names.
+    :return: tuple of (dev, test) where dev and test are lists of file names from config_path file
+    """
     # Read dev/test split from config
     dev_files, test_files = [], []
     container = dev_files
@@ -42,9 +44,8 @@ def read_bsf_data(f_name):
     # read tokens
     with open (path + '.txt', 'r') as f:
         tok_txt = f.read()
-    
-    
-    return (tok_txt, annotations)
+
+    return tok_txt, annotations
 
 
 def read_data_to_iob(file_names: list[str]):
@@ -56,7 +57,6 @@ def read_data_to_iob(file_names: list[str]):
     Y = []
     X = []
     for f_name in tqdm(file_names, total=len(file_names)):
-    #     print(f_name)
         txt, ann = read_bsf_data(f_name)
         iob_lst = convert_bsf(txt, ann, 'iob').split('\n')
     #     print(iob)
@@ -65,6 +65,6 @@ def read_data_to_iob(file_names: list[str]):
         Y.append(iob)
         X.append(txt)
     
-    return (X, Y)
+    return X, Y
 
     
