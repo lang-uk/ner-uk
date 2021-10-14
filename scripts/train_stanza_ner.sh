@@ -3,7 +3,7 @@
 # Launch training process for Stanza model.
 # This script will try checkout Stanza repo and will install it as local pip package.
 # If word vectors are not provided with '-w' option, the script will also download the default version for Stanza.
-# To avoid issues with pathes and dir structure, the script must be run from a root of project 'scripts/train_stanza_ner.sh'
+# To avoid issues with paths and dir structure, the script must be run from a root of project 'scripts/train_stanza_ner.sh'
 
 # processing arguments
 
@@ -35,7 +35,7 @@ then
 fi
 
 # clone stanza git repo to workspace folder
-git clone https://github.com/gawy/stanza.git --branch ner-languk-def-split --single-branch $workspace/stanza-git
+git clone https://github.com/stanfordnlp/stanza.git $workspace/stanza-git
 pip3 install $workspace/stanza-git
 
 # download stanza pretrained vectors if those are not provided via cmd line

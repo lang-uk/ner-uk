@@ -19,7 +19,6 @@ The resulting model will reside in `workspace/mitie/mitie_ner_model.dat`
 
 ## Stanza
 Stanza already have almost everything that is required to train on our data set merged in.
-Some fixes are pending to be merged from `https://github.com/gawy/stanza.git --branch ner-languk-def-split` (ability to read train-test split from our file insted of random split).
 
 Run: `scripts/train_stanza_ner.sh`
 
