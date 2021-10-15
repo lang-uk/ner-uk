@@ -63,6 +63,9 @@ A_sportzt.com_Startuvav_chempionat_V_Zhytomyra_z_futzalu(4).tok
 A_sportzt.com_V_Zhytomyri_vidbuvsia_Mizhnarodnyi_turnir(3).tok
 A_theinsider.ua_Kiyanovska_1_Ya_ne_poet_2014(4).tok
 A_theinsider.ua_Kiyanovska_2_Ya_ne_poet_2014(4).tok
+A_pravda.lutsk.ua_Onyshchenko_Merom_Lutska_bude_Volodymyr_Bondar_2015(5).tok
+A_pravda.lutsk.ua_Verbych_Pislia_dniv_pamiati_ta_prymyrennia_2015(5).tok
+A_prokovel.com_Kovelchanka_Tetiana_Kob_vyborola_Kubok_Ukrainy_z_boksu_2015(4).tok
 B_Khaustov_495_rokiv_vid_pochatku_liuteranskoi_reformatsii_reformatsiia_tryvaie_2012_1(4).tok
 B_Khaustov_495_rokiv_vid_pochatku_liuteranskoi_reformatsii_reformatsiia_tryvaie_2012_2(4).tok
 B_Marusiak_Pro_Pokaiannia_2013(4).tok
@@ -99,6 +102,8 @@ D_Yermolenko_Daleki_blyzki_1_2015(5).tok
 D_Yermolenko_Daleki_blyzki_2_2015(4).tok
 D_Zabuzhko_Z_mapy_knyh_i_liudei_1_2012(4).tok
 D_Zabuzhko_Z_mapy_knyh_i_liudei_2_2012(5).tok
+D_Vykhovanets_Rozmovlyaymo_ukrayinskoyu_1_2012(5).tok
+D_Vykhovanets_Rozmovlyaymo_ukrayinskoyu_2_2012(5).tok
 E_Zaproshennia_Lektsiia_Oleny_Synchak_Feminityvy_vid_symvolichnoi_vlady_do_spravedlyvoi_movy_Lviv_2015(3).tok
 E_Orhanizatsiya_roboty_litnikh_shkil_dlya_obdarovanykh_ditey_2013(4).tok
 E_Postanova_Pravlinnya_Natsbanku_Ukrayiny_2015(3).tok
@@ -112,6 +117,7 @@ G_Humeniuk_Standartyzatsiya_v_terminolohiyi_2015(5).tok
 G_Ohar_Dytiacha_knyha_v_ukrainskomu_sotsiumi_1_2012(4).tok
 G_Ohar_Dytiacha_knyha_v_ukrainskomu_sotsiumi_2_2012(4).tok
 G_Oltarzhevskyj_Osnovy_ta_metody_diyalnosti_suchasnykh_korporatyvnykh_media_1_2013(3).tok
+G_Vilchynskyi_Transformatsiya_rayonnoyi_presy_2015(4).tok
 H_Bublyk_Obyektno_oriyentovane_prohramuvannya_2_2015(5).tok
 H_Bublyk_Obyektno_oriyentovane_prohramuvannya_3_2015(5).tok
 H_Herasymiv_Zakhyst_Vitchyzny_2011(5).tok
@@ -119,6 +125,7 @@ H_Paliy_Dyferentsialna_psyholohia_2010(2)(4).tok
 H_Pometun_Istoriia_Ukrainy_2012_1(5).tok
 H_Pometun_Istoriia_Ukrainy_2012_2(4).tok
 H_Popel_Khimiia_11_klas_2011(5).tok
+H_Tsaryk_Ekolohiia_2011(5).tok
 I_Andrukhovych_Feliks_Avstriya_2014(4).tok
 I_Andrusyak_Hoydalka_2015(5).tok
 I_Babkina_1_Sonia_2013(5).tok
@@ -223,6 +230,8 @@ I_Vlasiuk_2_Kazky_lirnyka_Sashka_2011(5).tok
 I_Volkov_Slid_na_vodi_2011(5).tok
 I_Yarova_Chorno_bile_2016(5).tok
 I_Zhadan_Mesopotamia (Mario)_2014(5).tok
+I_Protsiuk_Desiatyi_riadok_1_2014(5).tok
+I_Protsiuk_Desiatyi_riadok_3_2014(5).tok
 
 TEST
 A_persha.kr.ua_Obodovska_Podorozhuyuchy_stezhkamy_Shevchenka_2014(4).tok
@@ -230,9 +239,6 @@ A_persha.kr.ua_Shevchenko_Kirovohradky,_obyrayte_cholovika_sered_shakhistiv_2014
 A_persha.kr.ua_Shevchenko_U_ramkakh_roku_Shevchenka_2014(3).tok
 A_persha.kr.ua_U_Kirovohradi_shakhrayi_vyhotovlyayut_biometrychni_pasporty_2015(4).tok
 A_pravda-kr.com.ua_Nesen_Dyvna_khvoroba_vbyvaye_holubiv_2013(4).tok
-A_pravda.lutsk.ua_Onyshchenko_Merom_Lutska_bude_Volodymyr_Bondar_2015(5).tok
-A_pravda.lutsk.ua_Verbych_Pislia_dniv_pamiati_ta_prymyrennia_2015(5).tok
-A_prokovel.com_Kovelchanka_Tetiana_Kob_vyborola_Kubok_Ukrainy_z_boksu_2015(4).tok
 B_Zvernennia_Biuro_UHKTS_z_pytan_ekolohii_2013(4).tok
 B_Zvernennia_Tradytsiinyh_Ukr_Tserkov_2011(4).tok
 C_Vynnychuk_Halytska_kuhnya_6_2014(5).tok
@@ -243,18 +249,12 @@ C_Vynnychuk_Halytska_kukhnya_7_2014.tok
 C_Vynnychuk_Halytska_kukhnya_8_2014(5).tok
 D_Shevchuk_Pro_istoryko-lit._pamiatky_2012(4).tok
 D_Sverstiuk_Hohol_2013(5).tok
-D_Vykhovanets_Rozmovlyaymo_ukrayinskoyu_1_2012(5).tok
-D_Vykhovanets_Rozmovlyaymo_ukrayinskoyu_2_2012(5).tok
 F_Sanina_Himnastyka_mozku_1_2014(5).tok
 F_Sanina_Himnastyka_mozku_2_2014(5).tok
 G_Shymko_Druhe_zhyttia_motornyh_olyv_2013(3).tok
 G_Sokoliuk_Formuvannia_skladu_vody_2014(5).tok
-G_Vilchynskyi_Transformatsiya_rayonnoyi_presy_2015(4).tok
 H_Semenyuk_Ukraiinska_literatura_11_klas_2011_1(5).tok
 H_Semenyuk_Ukraiinska_literatura_11_klas_2011_2(5).tok
-H_Tsaryk_Ekolohiia_2011(5).tok
-I_Protsiuk_Desiatyi_riadok_1_2014(5).tok
-I_Protsiuk_Desiatyi_riadok_3_2014(5).tok
 I_Romanyshyn_Lesiv_Viyna_shcho_zminyla_Rondo_2015(5).tok
 I_Svitova_Zhmenka_sliv_dlya_dobroho_nastroyu_1_2014(4).tok
 I_Svitova_Zhmenka_sliv_dlya_dobroho_nastroyu_2_2014(5).tok
