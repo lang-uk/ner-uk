@@ -4,6 +4,7 @@ import argparse
 import logging
 import os
 import glob
+import time
 from collections import namedtuple
 import re
 from typing import Tuple
@@ -78,6 +79,40 @@ def convert_bsf(data: str, bsf_markup: str, converter: str = 'beios') -> str:
         res += join_simple_chunk(data[prev_idx:])
 
     return '\n'.join(res)
+
+
+def convert_bsf_2_vulyk(text: str, bsf_markup: str) -> dict:
+    """
+    Given tokenized text and named entities in Bratt-Standoff format, generate object
+    in the format compatible with Vulyk markup tool.
+    :param text: tokenized text (space as separator)
+    :param bsf_markup: named entities in Bratt-Standoff format
+    :return: dict that can be directly converted to Vulyk json file
+    """
+    bsf = parse_bsf(bsf_markup)
+    ents = [[e.id, e.tag, [[e.start_idx, e.end_idx]]] for e in bsf]
+
+    idx = 0
+    t_idx = 0
+    s_offsets = []
+    t_offsets = []
+    if len(text) > 0:
+        for s in text.split('\n'):
+            s_offsets.append([idx, idx + len(s)])
+            for t in s.strip().split(' '):
+                t_offsets.append([t_idx, t_idx + len(t)])
+                t_idx += len(t) + 1
+
+            idx += len(s) + 1
+            t_idx = idx
+
+    ts = int(time.time())
+    vulyk = {"modifications": [], "equivs": [], "protocol": 1, "ctime": ts, "triggers": [], "text": text,
+              "source_files": ["ann", "txt"], "messages": [], "sentence_offsets": s_offsets, "comments": [],
+              "entities": ents, "mtime": ts, "relations": [], "token_offsets": t_offsets, "action": "getDocument",
+              "normalizations": [], "attributes": [], "events": [], "document": "", "collection": "/"}
+
+    return vulyk
 
 
 def parse_bsf(bsf_data: str) -> list:

@@ -1,5 +1,5 @@
 import unittest
-from scripts.convert import convert_bsf, parse_bsf, BsfInfo
+from scripts.convert_markup import convert_bsf, parse_bsf, BsfInfo
 
 
 class TestBsf2Iob(unittest.TestCase):

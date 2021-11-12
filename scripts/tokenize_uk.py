@@ -17,7 +17,7 @@ def tokenize_text(string):
     for part in string.split(u'\n'):
         par = []
         for sent in tokenize_sents(part):
-            par.append(tokenize_words(string))
+            par.append(tokenize_words(sent))
         rez.append(par)
     return rez
 
