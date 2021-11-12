@@ -1,3 +1,4 @@
+import time
 import unittest
 from scripts.convert_markup import convert_bsf_2_vulyk, parse_bsf, BsfInfo
 import json
@@ -9,7 +10,7 @@ class TestBsf2Vulyk(unittest.TestCase):
             "modifications": [ ],
             "equivs": [ ],
             "protocol": 1,
-            "ctime": 0,
+            "ctime": int(time.time()),
             "triggers": [ ],
             "text": "",
             "source_files": ["ann", "txt" ],
@@ -17,7 +18,7 @@ class TestBsf2Vulyk(unittest.TestCase):
             "sentence_offsets": [],
             "comments": [ ],
             "entities": [],
-            "mtime": 0,
+            "mtime": int(time.time()),
             "relations": [ ],
             "token_offsets": [],
             "action": "getDocument",
@@ -42,12 +43,10 @@ class TestBsf2Vulyk(unittest.TestCase):
 
     def test_tok_idx(self):
         data = """розпорядження землями
-в межах , 
-
-визначених"""
+в межах , визначених"""
         bsf_markup = ""
         tok_idx = [[0, 13], [14, 21],
-                   [22, 23], [24, 29], [30, 31], [34, 44]]
+                   [22, 23], [24, 29], [30, 31], [32, 42]]
         self.vulyk_base["text"] = data
         self.assertEqual(tok_idx, convert_bsf_2_vulyk(data, bsf_markup)["token_offsets"])
 
