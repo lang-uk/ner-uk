@@ -45,11 +45,11 @@ def format_token_as_iob(token: str, tag: str) -> list:
 
 def convert_bsf(data: str, bsf_markup: str, converter: str = 'beios') -> str:
     """
-    Convert data file with NER markup in Brat Standoff Format to BEIOS or IOB format.
+    Convert data file with NER markup in Brat standoff Format to BEIOS or IOB format.
 
     :param converter: iob or beios converter to use for document
     :param data: tokenized data to be converted. Each token separated with a space
-    :param bsf_markup: Brat Standoff Format markup
+    :param bsf_markup: Brat standoff Format markup
     :return: data in BEIOS or IOB format https://en.wikipedia.org/wiki/Inside–outside–beginning_(tagging)
     """
 
@@ -83,10 +83,10 @@ def convert_bsf(data: str, bsf_markup: str, converter: str = 'beios') -> str:
 
 def convert_bsf_2_vulyk(text: str, bsf_markup: str) -> dict:
     """
-    Given tokenized text and named entities in Bratt-Standoff format, generate object
+    Given tokenized text and named entities in Brat standoff format, generate object
     in the format compatible with Vulyk markup tool.
     :param text: tokenized text (space as separator)
-    :param bsf_markup: named entities in Bratt-Standoff format
+    :param bsf_markup: named entities in Brat standoff format
     :return: dict that can be directly converted to Vulyk json file
     """
     bsf = parse_bsf(bsf_markup)
