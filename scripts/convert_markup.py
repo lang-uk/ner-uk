@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+# Data conversion utility for ner-uk data set. Originally created for purposes of training Stanza model.
+# Later Stanza has merged some of this code inside.
+# Terminology:
+# IOB https://en.wikipedia.org/wiki/Inside%E2%80%93outside%E2%80%93beginning_(tagging) Some sources refer to this as BIO
+# BEIOS - extended IOB with E == end (for multi word tokens)
+
+
 import argparse
 import logging
 import os
@@ -166,12 +173,12 @@ def convert_bsf_in_folder(src_dir_path: str, dst_dir_path: str, converter: str =
             target_dataset.append(out_data)
     log.info(f'Data is split as following: train={len(train_set)}, dev={len(dev_set)}, test={len(test_set)}')
 
-    # writing data to {train/dev/test}.bio files
+    # writing data to {train/dev/test}.iob files
     names = ['train', 'dev', 'test']
     if doc_delim != '\n':
         doc_delim = '\n' + doc_delim + '\n'
     for idx, name in enumerate(names):
-        fname = os.path.join(corpus_folder, name + '.bio')
+        fname = os.path.join(corpus_folder, name + '.iob')
         with open(fname, 'w') as f:
             f.write(doc_delim.join(data_sets[idx]))
         log.info('Writing to ' + fname)
@@ -219,13 +226,17 @@ def read_languk_train_test_split(file_path: str, dev_split: float = 0.1) -> Tupl
 if __name__ == '__main__':
     logging.basicConfig()
 
-    parser = argparse.ArgumentParser(description='Convert lang-uk NER data set from BSF format to BEIOS format compatible with Stanza NER model training requirements.\n'
-                                                 'Original data set should be downloaded from https://github.com/lang-uk/ner-uk')
-    parser.add_argument('--src_dataset', type=str, default='../ner-uk/data', help='Dir with lang-uk dataset "data" folder (https://github.com/lang-uk/ner-uk)')
-    parser.add_argument('--dst', type=str, default='../ner-base/', help='Where to store the converted dataset')
-    parser.add_argument('-c', type=str, default='beios', help='`beios` or `iob` formats to be used for output')
-    parser.add_argument('--doc_delim', type=str, default='\n', help='Delimiter to be used to separate documents in the output data')
-    parser.add_argument('--split_file', type=str, help='Name of a file containing Train/Test split (files in train and test set)')
+    parser = argparse.ArgumentParser(
+        description='Convert lang-uk NER data set from Brat stadoff format to BEIOS or IOB format'
+                    ' (compatible with Stanza NER model training requirements).')
+    parser.add_argument('--src_dataset', type=str, default='data',
+                        help='Dir with lang-uk dataset "data" folder (https://github.com/lang-uk/ner-uk/data)')
+    parser.add_argument('--dst', type=str, default='workspace/data', help='Where to store the converted dataset')
+    parser.add_argument('-c', type=str, default='iob', help='`beios` or `iob` formats to be used for output')
+    parser.add_argument('--doc_delim', type=str, default='\n',
+                        help='Delimiter to be used to separate documents in the output data')
+    parser.add_argument('--split_file', type=str, default='doc/dev-test-split.txt',
+                        help='Name of a file containing Train/Test split (files in train and test set)')
     parser.print_help()
     args = parser.parse_args()
 

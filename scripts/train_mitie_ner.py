@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import shutil
 import requests
 from bsf_beios.bsf_to_beios import BsfInfo, parse_bsf
