@@ -1,4 +1,3 @@
-git+https://github.com/gawy/stanza-lang-uk.git
 mitie
 tqdm
 sklearn
