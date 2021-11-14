@@ -7,6 +7,9 @@ from mitie import *
 import argparse
 import os
 import multiprocessing
+
+from tqdm import tqdm
+
 from ner_utils import read_train_test_split
 
 """
@@ -68,9 +71,20 @@ def prepare_mitie_training_data(dev_files):
 
 
 def download_file(download_url, file_name):
-    with requests.get(download_url, stream=True) as r:
-        with open(file_name, 'wb') as f:
-            shutil.copyfileobj(r.raw, f)
+    resp = requests.get(download_url, stream=True)
+    total = int(resp.headers.get('content-length', 0))
+
+    with open(file_name, 'wb') as file, tqdm(
+            desc=file_name,
+            total=total,
+            unit='iB',
+            unit_scale=True,
+            unit_divisor=1024,
+    ) as bar:
+        for data in resp.iter_content(chunk_size=1024):
+            size = file.write(data)
+            bar.update(size)
+
     return file_name
 
 
@@ -92,8 +106,7 @@ def run_training(cpu_threads, config_path, feature_extractor_path):
 
         if not os.path.exists(feature_extractor_path):
             print(f'Feature extractor file not provided or not found. '
-                  f'\nTrying to download from {feature_extractor_url}'
-                  f'\nSorry no progress bar.')
+                  f'\nTrying to download from {feature_extractor_url}')
 
             ext = feature_extractor_url.split('.')[-1]
             download_file(feature_extractor_url, feature_extractor_path + '.' + ext)
