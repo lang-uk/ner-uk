@@ -5,7 +5,7 @@
 Pre-requisites
 * `pip3 install -r scripts/requirements.txt`
 
-Need IOB/BIO formatted files? Run this: `python3 scripts/convert_markup.py`
+Need IOB/BIO formatted files? Run this: `python3 scripts/convert_data.py`
 Files will be written to `workspace/data` folder.
 
 ### MITIE
@@ -36,6 +36,11 @@ Trained model will be available under workspace/stanza folder.
 Execute: `python3 scripts/eval_ner_models.py --stanza=<path_to_stanza_model> --mitie=<path_to_mitie_model>`
 
 The script will produce report with the help of sklearn classification report and will print it out to console.
+
+## Running tests
+```shell
+python3 -m unittest discover -s test
+```
 
 ## tokenize-uk.lisp
 
