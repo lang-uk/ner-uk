@@ -32,6 +32,8 @@ Word count can usually be obtained by `wc -l <file>`
 
 Trained model will be available under workspace/stanza folder.
 
+Stanza additionally provides pretrained Character level model. It was shown to improve performance of the NER model by around 1%.
+
 ## Evaluating NER models
 Execute: `python3 scripts/eval_ner_models.py --stanza=<path_to_stanza_model> --mitie=<path_to_mitie_model>`
 

@@ -49,6 +49,8 @@ then
     wordvec_path=../$wordvec_file_name
 fi
 
+# Create a link to lang-uk root folder inside stanza workspace.
+# Stanza expects lang-uk repo to be checked out on the same level as it is.
 mkdir -p $workspace/lang-uk
 ln -s "$(pwd)" $workspace/lang-uk/ner-uk
 
