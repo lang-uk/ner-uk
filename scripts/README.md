@@ -39,6 +39,12 @@ Execute: `python3 scripts/eval_ner_models.py --stanza=<path_to_stanza_model> --m
 
 The script will produce report with the help of sklearn classification report and will print it out to console.
 
+## Converting data to IOB/BEIOS formats
+If you need data in IOB/BEIOS formats for some other kinds of training just use `convert_data.py` script.
+
+`python3 scripts/convert_data.py` will generate iob files according to train/test split in doc/dev-test-split.txt.
+For more parameters run `python3 scripts/convert_data.py -h`.
+
 ## Running tests
 ```shell
 python3 -m unittest discover -s test

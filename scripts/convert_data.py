@@ -231,11 +231,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Convert lang-uk NER data set from Brat stadoff format to BEIOS or IOB format'
                     ' (compatible with Stanza NER model training requirements).')
+    parser.add_argument('-c', type=str, default='iob', help='`beios` or `iob` formats to be used for output')
+
     parser.add_argument('--src_dataset', type=pathlib.Path, default='data',
                         help='Dir with lang-uk dataset "data" folder (https://github.com/lang-uk/ner-uk/data)')
     parser.add_argument('--dst', type=pathlib.Path, default='workspace/data',
                         help='Where to store the converted dataset')
-    parser.add_argument('-c', type=str, default='iob', help='`beios` or `iob` formats to be used for output')
+
     parser.add_argument('--doc_delim', type=str, default='\n',
                         help='Delimiter to be used to separate documents in the output data')
 
