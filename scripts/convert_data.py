@@ -18,6 +18,7 @@ from typing import Tuple
 
 from tqdm import tqdm
 from random import choices, shuffle
+from os.path import splitext
 
 BsfInfo = namedtuple('BsfInfo', 'id, tag, start_idx, end_idx, token')
 
@@ -152,7 +153,7 @@ def convert_bsf_in_folder(src_dir_path: pathlib.Path, dst_dir_path: pathlib.Path
 
     log.info(f'Found {len(tok_files)} files in data folder "{src_dir_path}"')
     for (tok_fname, ann_fname) in tqdm(zip(tok_files, ann_files), total=len(tok_files), unit='file'):
-        if tok_fname[:-3] != ann_fname[:-3]:
+        if splitext(tok_fname)[0] != splitext(ann_fname)[0]:
             tqdm.write(f'Token and Annotation file names do not match ann={ann_fname}, tok={tok_fname}')
             continue
 
@@ -165,7 +166,7 @@ def convert_bsf_in_folder(src_dir_path: pathlib.Path, dst_dir_path: pathlib.Path
                 target_dataset = choices(data_sets, split_weights)[0]
             else:
                 target_dataset = train_set
-                fkey = os.path.basename(tok_fname)[:-4]
+                fkey = splitext(os.path.basename(tok_fname))[0]
                 if fkey in dev_names:
                     target_dataset = dev_set
                 elif fkey in test_names:
