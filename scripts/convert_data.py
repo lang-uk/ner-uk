@@ -11,7 +11,7 @@ import argparse
 import logging
 import os
 import glob
-import time
+import pathlib
 from collections import namedtuple
 import re
 from typing import Tuple
@@ -75,10 +75,10 @@ def convert_bsf(data: str, bsf_markup: str, converter: str = 'beios') -> str:
 
     prev_idx = 0
     m_ln: BsfInfo
+    convert_f = converters[converter]
     for m_ln in markup:
         res += join_simple_chunk(data[prev_idx:m_ln.start_idx])
 
-        convert_f = converters[converter]
         res.extend(convert_f(m_ln.token, m_ln.tag))
         prev_idx = m_ln.end_idx
 
@@ -106,8 +106,8 @@ def parse_bsf(bsf_data: str) -> list:
     return result
 
 
-def convert_bsf_in_folder(src_dir_path: str, dst_dir_path: str, converter: str = 'beios',
-                          doc_delim: str = '\n', train_test_split_file: str = None) -> None:
+def convert_bsf_in_folder(src_dir_path: pathlib.Path, dst_dir_path: pathlib.Path, converter: str = 'beios',
+                          doc_delim: str = '\n', train_test_split_file: pathlib.Path = None) -> None:
     """
 
     :param doc_delim: delimiter to be used between documents
@@ -120,24 +120,25 @@ def convert_bsf_in_folder(src_dir_path: str, dst_dir_path: str, converter: str =
     # following 2 constants need to comply with stanza naming for corpus and language
     corpus_name = 'Ukrainian-languk'
 
-    ann_path = os.path.join(src_dir_path, '*.tok.ann')
-    ann_files = glob.glob(ann_path)
+    ann_path = src_dir_path / '*.tok.ann'
+    ann_files = glob.glob(str(ann_path))
     ann_files.sort()
 
-    tok_path = os.path.join(src_dir_path, '*.tok.txt')
-    tok_files = glob.glob(tok_path)
+    tok_path = src_dir_path / '*.tok.txt'
+    tok_files = glob.glob(str(tok_path))
     tok_files.sort()
 
-    corpus_folder = os.path.join(dst_dir_path, corpus_name)
-    if not os.path.exists(corpus_folder):
-        os.makedirs(corpus_folder)
+    corpus_folder = dst_dir_path / corpus_name
+    if not corpus_folder.exists():
+        corpus_folder.mkdir(parents=True)
 
-    if len(ann_files) == 0 or len(tok_files) == 0:
-        log.warning(f'Token and annotation files are not found at specified path {ann_path}')
+    if not ann_files or not tok_files:
+        log.error(f'Token and annotation files are not found at specified path {ann_path}')
         return
     if len(ann_files) != len(tok_files):
-        log.warning(
+        log.error(
             f'Mismatch between Annotation and Token files. Ann files: {len(ann_files)}, token files: {len(tok_files)}')
+        return
 
     train_set = []
     dev_set = []
@@ -178,15 +179,15 @@ def convert_bsf_in_folder(src_dir_path: str, dst_dir_path: str, converter: str =
     if doc_delim != '\n':
         doc_delim = '\n' + doc_delim + '\n'
     for idx, name in enumerate(names):
-        fname = os.path.join(corpus_folder, name + '.iob')
-        with open(fname, 'w') as f:
+        fname = corpus_folder / (name + '.iob')
+        with fname.open('w') as f:
             f.write(doc_delim.join(data_sets[idx]))
-        log.info('Writing to ' + fname)
+        log.info('Writing to ' + str(fname))
 
     log.info('All done')
 
 
-def read_languk_train_test_split(file_path: str, dev_split: float = 0.1) -> Tuple:
+def read_languk_train_test_split(file_path: pathlib.Path, dev_split: float = 0.1) -> Tuple:
     """
     Read predefined split of train and test files in data set.
     Originally located under doc/dev-test-split.txt
@@ -194,10 +195,10 @@ def read_languk_train_test_split(file_path: str, dev_split: float = 0.1) -> Tupl
     :param dev_split: 0 to 1 float value defining how much to allocate to dev split
     :return: tuple of (train, dev, test) each containing list of files to be used for respective data sets
     """
-    log.info(f'Trying to read train/dev/test split from file "{file_path}". Dev allocation = {dev_split}')
+    log.info(f'Trying to read train/dev/test split from file "{str(file_path)}". Dev allocation = {dev_split}')
     train_files, test_files, dev_files = [], [], []
     container = test_files
-    with open(file_path, 'r') as f:
+    with file_path.open('r') as f:
         for ln in f:
             ln = ln.strip()
             if ln == 'DEV':
@@ -229,15 +230,22 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Convert lang-uk NER data set from Brat stadoff format to BEIOS or IOB format'
                     ' (compatible with Stanza NER model training requirements).')
-    parser.add_argument('--src_dataset', type=str, default='data',
+    parser.add_argument('--src_dataset', type=pathlib.Path, default='data',
                         help='Dir with lang-uk dataset "data" folder (https://github.com/lang-uk/ner-uk/data)')
-    parser.add_argument('--dst', type=str, default='workspace/data', help='Where to store the converted dataset')
+    parser.add_argument('--dst', type=pathlib.Path, default='workspace/data',
+                        help='Where to store the converted dataset')
     parser.add_argument('-c', type=str, default='iob', help='`beios` or `iob` formats to be used for output')
     parser.add_argument('--doc_delim', type=str, default='\n',
                         help='Delimiter to be used to separate documents in the output data')
-    parser.add_argument('--split_file', type=str, default='doc/dev-test-split.txt',
-                        help='Name of a file containing Train/Test split (files in train and test set)')
-    parser.print_help()
+
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--split_file', type=pathlib.Path, default='doc/dev-test-split.txt',
+                       help='Name of a file containing Train/Test split (files in train and test set)')
+    group.add_argument('--split_randomly', action='store_true',
+                       help='Randomly create train/dev/test sets from src_dataset.')
+
+    parser.print_usage()
     args = parser.parse_args()
 
-    convert_bsf_in_folder(args.src_dataset, args.dst, args.c, args.doc_delim, train_test_split_file=args.split_file)
+    split_file = None if args.split_randomly else args.split_file
+    convert_bsf_in_folder(args.src_dataset, args.dst, args.c, args.doc_delim, train_test_split_file=split_file)
