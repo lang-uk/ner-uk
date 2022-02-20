@@ -11,24 +11,14 @@ from ner_utils import parse_bsf
 from collections import Counter
 from itertools import chain
 
-# check where we are located and resolve path properly
-# to safely execute from within or outside of the scripts folder
-root_path: str
-if Path('./data').exists():
-    root_path = Path('./')
-elif Path('../data').exists():
-    root_path = Path('../')
 
-train_names, dev_names, test_names = read_languk_train_test_split(root_path / Path("doc/dev-test-split.txt"), 0)
-
-
-#doc sent
-train_cnt = len(train_names)
-test_cnt = len(test_names)
-total_cnt = train_cnt + test_cnt
-
-
-def read_data(f_names: list):
+def read_data(root_path:Path, f_names: list):
+    """
+    Read data from a list of files in `f_names`.
+    :param root_path: path of the working dir
+    :param f_names: list of file names to read from
+    :return: list of tuples (document split in sentences, annotation data in BsfInfo structures)
+    """
     base_path = root_path / Path('data/')
     
     tok_storage = []
@@ -48,8 +38,24 @@ def read_data(f_names: list):
     return tok_storage, ann_storage
 
 
-train_data, train_ann = read_data(train_names)
-test_data, test_ann = read_data(test_names)
+# check where we are located and resolve path properly
+# to safely execute from within or outside of the scripts folder
+root_path: str
+if Path('./data').exists():
+    root_path = Path('./')
+elif Path('../data').exists():
+    root_path = Path('../')
+
+train_names, dev_names, test_names = read_languk_train_test_split(root_path / Path("doc/dev-test-split.txt"), 0)
+
+#doc sent
+train_cnt = len(train_names)
+test_cnt = len(test_names)
+total_cnt = train_cnt + test_cnt
+
+
+train_data, train_ann = read_data(root_path, train_names)
+test_data, test_ann = read_data(root_path, test_names)
 
 # sentense stats
 train_sent_cnt = [len(sents) for sents in train_data]
