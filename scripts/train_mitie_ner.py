@@ -2,15 +2,13 @@
 
 import shutil
 import requests
-from bsf_beios.bsf_to_beios import BsfInfo, parse_bsf
+from ner_utils import BsfInfo, parse_bsf, read_train_test_split
 from mitie import *
 import argparse
 import os
 import multiprocessing
 
 from tqdm import tqdm
-
-from ner_utils import read_train_test_split
 
 """
 Script intended to train mitie NER model using lang-uk data set in current repository.
