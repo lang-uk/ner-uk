@@ -3,7 +3,6 @@
 # Calculate basic statistics of the data set
 
 from pathlib import Path
-print(Path().resolve())
 
 from convert_data import read_languk_train_test_split
 from ner_utils import parse_bsf
@@ -40,11 +39,10 @@ def read_data(root_path:Path, f_names: list):
 
 # check where we are located and resolve path properly
 # to safely execute from within or outside of the scripts folder
-root_path: str
-if Path('./data').exists():
-    root_path = Path('./')
-elif Path('../data').exists():
-    root_path = Path('../')
+root_path = Path('./') if Path('./data').exists() else Path('../')
+if not Path('./data').exists() and not Path('../data').exists():
+    print('Please run this script either within ner-uk root folder or ner-uk/scripts folder.')
+    exit
 
 train_names, dev_names, test_names = read_languk_train_test_split(root_path / Path("doc/dev-test-split.txt"), 0)
 
