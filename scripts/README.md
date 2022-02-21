@@ -45,6 +45,9 @@ If you need data in IOB/BEIOS formats for some other kinds of training just use 
 `python3 scripts/convert_data.py` will generate iob files according to train/test split in doc/dev-test-split.txt.
 For more parameters run `python3 scripts/convert_data.py -h`.
 
+## Calculating the stats on current corpus
+If you want to get the most recent numbers on the corpus (document count, token count, split between train and test sets) - just run `scripts/corpus_stats.py`
+
 ## Running tests
 ```shell
 python3 -m unittest discover -s test
