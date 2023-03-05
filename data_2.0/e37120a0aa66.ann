@@ -1,0 +1,36 @@
+T1	ORG	0	21	ДП «НАЕК «Енергоатом»
+T2	DATE	22	30	10 липня
+T3	ORG	70	87	ТОВ «САП Україна»
+T4	ORG	141	144	SAP
+T5	MON	186	199	20,55 млн грн
+T6	ART	227	255	Віснику державних закупівель
+T7	ORG	282	285	SAP
+T8	MISC	581	595	SAP ERP пакету
+T9	ORG	616	627	САП Україна
+T10	ORG	647	653	САП АГ
+T11	ORG	656	662	SAP AG
+T12	ORG	668	692	САП Дойчленд АГ & КО.
+КГ
+T13	ORG	696	723	SAP Deutschland AG & CO.
+KG
+T14	JOB	732	741	розробник
+T15	ORG	851	863	ПрАТ «Інком»
+T16	PERS	864	884	Олександра Кардакова
+T17	ORG	887	898	ТОВ «Конім»
+T18	PERS	899	919	Олексія Китаєвського
+T19	PERS	923	942	Володимира Романова
+T20	ORG	1055	1058	SAP
+T21	ORG	1061	1091	SAP Application Developer User
+T22	MISC	1269	1293	Програмного забезпечення
+T23	ORG	1334	1362	SAP NetWeaver Developer User
+T24	ORG	1365	1394	SAP Application Employee User
+T25	ORG	1443	1446	SAP
+T26	ORG	1449	1482	SAP Application Professional User
+T27	MISC	1653	1677	Програмним забезпеченням
+T28	MISC	1684	1688	SBOP
+T29	ORG	1730	1771	SAP Application Limited Professional User
+T30	ORG	1827	1830	SAP
+T31	ORG	1833	1874	SAP Application Professional Limited User
+T32	MISC	1996	2020	Програмним забезпеченням
+T33	MISC	2027	2031	SBOP
+T34	ORG	2073	2114	SAP Application Business Information User

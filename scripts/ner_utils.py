@@ -1,21 +1,24 @@
-from collections import namedtuple
 import os
-from tqdm import tqdm
 import re
+import pathlib
+from collections import namedtuple
+from typing import Generator
 
-BsfInfo = namedtuple('BsfInfo', 'id, tag, start_idx, end_idx, token')
-    
+from tqdm import tqdm
+
+BsfInfo = namedtuple("BsfInfo", "id, tag, start_idx, end_idx, token")
+
 
 def format_token_as_beios(token: str, tag: str) -> list:
     t_words = token.split()
     res = []
     if len(t_words) == 1:
-        res.append(token + ' S-' + tag)
+        res.append(token + " S-" + tag)
     else:
-        res.append(t_words[0] + ' B-' + tag)
-        for t_word in t_words[1: -1]:
-            res.append(t_word + ' I-' + tag)
-        res.append(t_words[-1] + ' E-' + tag)
+        res.append(t_words[0] + " B-" + tag)
+        for t_word in t_words[1:-1]:
+            res.append(t_word + " I-" + tag)
+        res.append(t_words[-1] + " E-" + tag)
     return res
 
 
@@ -23,15 +26,15 @@ def format_token_as_iob(token: str, tag: str) -> list:
     t_words = token.split()
     res = []
     if len(t_words) == 1:
-        res.append(token + ' B-' + tag)
+        res.append(token + " B-" + tag)
     else:
-        res.append(t_words[0] + ' B-' + tag)
+        res.append(t_words[0] + " B-" + tag)
         for t_word in t_words[1:]:
-            res.append(t_word + ' I-' + tag)
+            res.append(t_word + " I-" + tag)
     return res
 
 
-def convert_bsf(data: str, bsf_markup: str, converter: str = 'beios') -> str:
+def convert_bsf(data: str, bsf_markup: str, converter: str = "beios") -> str:
     """
     Convert data file with NER markup in Brat standoff Format to BEIOS or IOB format.
 
@@ -45,12 +48,12 @@ def convert_bsf(data: str, bsf_markup: str, converter: str = 'beios') -> str:
         if len(chunk.strip()) == 0:
             return []
         # keep the newlines, but discard the non-newline whitespace
-        tokens = re.split(r'(\n)|\s', chunk.strip())
+        tokens = re.split(r"(\n)|\s", chunk.strip())
         # the re will return None for splits which were not caught in a group
         tokens = [x for x in tokens if x is not None]
-        return [token + ' O' if len(token.strip()) > 0 else token for token in tokens]
+        return [token + " O" if len(token.strip()) > 0 else token for token in tokens]
 
-    converters = {'beios': format_token_as_beios, 'iob': format_token_as_iob}
+    converters = {"beios": format_token_as_beios, "iob": format_token_as_iob}
     res = []
     markup = parse_bsf(bsf_markup)
 
@@ -58,7 +61,7 @@ def convert_bsf(data: str, bsf_markup: str, converter: str = 'beios') -> str:
     m_ln: BsfInfo
     convert_f = converters[converter]
     for m_ln in markup:
-        res += join_simple_chunk(data[prev_idx:m_ln.start_idx])
+        res += join_simple_chunk(data[prev_idx : m_ln.start_idx])
 
         res.extend(convert_f(m_ln.token, m_ln.tag))
         prev_idx = m_ln.end_idx
@@ -66,25 +69,26 @@ def convert_bsf(data: str, bsf_markup: str, converter: str = 'beios') -> str:
     if prev_idx < len(data) - 1:
         res += join_simple_chunk(data[prev_idx:])
 
-    return '\n'.join(res)
+    return "\n".join(res)
 
 
 def parse_bsf(bsf_data: str) -> list:
     """
     Convert multiline textual bsf representation to a list of named entities.
 
-    :param bsf_data: data in the format 'T9	PERS 778 783    токен'. Can be multiple lines.
+    :param bsf_data: data in the format 'T9 PERS 778 783    токен'. Can be multiple lines.
     :return: list of named tuples for each line of the data representing a single named entity token
     """
     if len(bsf_data.strip()) == 0:
         return []
 
-    ln_ptrn = re.compile(r'(T\d+)\s(\w+)\s(\d+)\s(\d+)\s(.+?)(?=T\d+\s\w+\s\d+\s\d+|$)', flags=re.DOTALL)
+    ln_ptrn = re.compile(r"(T\d+)\s(\w+)\s(\d+)\s(\d+)\s(.+?)(?=T\d+\s\w+\s\d+\s\d+|$)", flags=re.DOTALL)
     result = []
     for m in ln_ptrn.finditer(bsf_data.strip()):
         bsf = BsfInfo(m.group(1), m.group(2), int(m.group(3)), int(m.group(4)), m.group(5).strip())
         result.append(bsf)
     return result
+
 
 def read_train_test_split(config_path):
     """
@@ -94,18 +98,18 @@ def read_train_test_split(config_path):
     # Read dev/test split from config
     dev_files, test_files = [], []
     container = dev_files
-    with open(config_path, 'r') as f:
+    with open(config_path, "r") as f:
         for ln in f:
             ln = ln.strip()
-            if ln == 'DEV':
+            if ln == "DEV":
                 container = dev_files
-            elif ln == 'TEST':
+            elif ln == "TEST":
                 container = test_files
-            elif ln == '':
+            elif ln == "":
                 pass
             else:
                 container.append(ln)
-    return dev_files,test_files
+    return dev_files, test_files
 
 
 def read_bsf_data(f_name):
@@ -113,15 +117,15 @@ def read_bsf_data(f_name):
     TODO: full path or relative path will be enough
     Locate .ann and .txt for `f_name` and read data from those 2 files.
     It is assumed that files are located in `data/` directory relative to current working dir.
-    :param f_name: path to file without an extension. 
+    :param f_name: path to file without an extension.
     :return : tuple of (string, string) with raw data from .txt and .ann files.
     """
-    path = os.path.join('data', f_name)
+    path = os.path.join("data", f_name)
     # read ann
-    with open (path + '.ann', 'r') as f:
+    with open(path + ".ann", "r") as f:
         annotations = f.read()
     # read tokens
-    with open (path + '.txt', 'r') as f:
+    with open(path + ".txt", "r") as f:
         tok_txt = f.read()
 
     return tok_txt, annotations
@@ -137,13 +141,69 @@ def read_data_to_iob(file_names: list[str]):
     X = []
     for f_name in tqdm(file_names, total=len(file_names)):
         txt, ann = read_bsf_data(f_name)
-        iob_lst = convert_bsf(txt, ann, 'iob').split('\n')
-    #     print(iob)
+        iob_lst = convert_bsf(txt, ann, "iob").split("\n")
+        #     print(iob)
         iob = [tok.split()[1] for tok in iob_lst if len(tok.split()) == 2]
-    #     print(iob)
+        #     print(iob)
         Y.append(iob)
         X.append(txt)
-    
+
     return X, Y
 
-    
+
+def read_proofreaded_bsf_data(f_name: pathlib.Path) -> Generator[BsfInfo, None, None]:
+    """
+    For some reason the BSF data generated by Vsevolod for proof-reading
+    has slightly different format. This function will try to fix it
+    Another twist with that file format is that some tokens are multiline
+    """
+    bsf_regex: re.Pattern = re.compile(r"(\w+)\s(\d+)\s(\d+)\s(.+?)(?=T\d+\s\w+\s\d+\s\d+|$)", flags=re.DOTALL)
+    current_token: int = 0
+    tag: str = ""
+    start_idx: int 
+    end_idx: int
+    token: str
+    is_comment: bool = False
+    is_token: bool = False
+
+    for i, line in enumerate(map(str.strip, f_name.open("r"))):
+        if not line:
+            continue
+
+        if line.startswith("#"):
+            if is_token:
+                current_token += 1
+                yield BsfInfo(current_token, tag, start_idx, end_idx, token)
+
+            is_comment = True
+            is_token = False
+
+            # Skipping the comments
+            continue
+
+        m = bsf_regex.search(line)
+        if m:
+            if is_token:
+                current_token += 1
+                yield BsfInfo(current_token, tag, start_idx, end_idx, token)
+
+            is_comment = False
+            is_token = True
+
+            # "id, tag, start_idx, end_idx, token"
+            tag = m.group(1)
+            start_idx = int(m.group(2))
+            end_idx = int(m.group(3))
+            token = m.group(4).strip()
+        else:
+            if is_comment:
+                continue
+            elif is_token:
+                token += "\n" + line
+            else:
+                print(f"Cannot parse line #{i} ({line}) from the file {f_name}")
+
+    # Leftovers
+    if is_token:
+        current_token += 1
+        yield BsfInfo(current_token, tag, start_idx, end_idx, token)
