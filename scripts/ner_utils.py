@@ -6,7 +6,10 @@ from typing import Generator
 
 from tqdm import tqdm
 
-BsfInfo = namedtuple("BsfInfo", "id, tag, start_idx, end_idx, token")
+BsfInfo = namedtuple("BsfInfo", "id, tag, start_idx, end_idx, token, comment", defaults=[None])
+
+def bsf_to_str(bsf: BsfInfo) -> str:
+    return f"{bsf.id}\t{bsf.tag}\t{bsf.start_idx}\t{bsf.end_idx}\t{bsf.token}"
 
 
 def format_token_as_beios(token: str, tag: str) -> list:
@@ -166,6 +169,7 @@ def read_proofreaded_bsf_data(f_name: pathlib.Path) -> Generator[BsfInfo, None, 
     is_comment: bool = False
     is_token: bool = False
 
+    current_comment = ""
     for i, line in enumerate(map(str.strip, f_name.open("r"))):
         if not line:
             continue
@@ -173,19 +177,22 @@ def read_proofreaded_bsf_data(f_name: pathlib.Path) -> Generator[BsfInfo, None, 
         if line.startswith("#"):
             if is_token:
                 current_token += 1
-                yield BsfInfo(current_token, tag, start_idx, end_idx, token)
+                yield BsfInfo(current_token, tag, start_idx, end_idx, token, current_comment)
+                current_comment = ""
 
             is_comment = True
             is_token = False
 
             # Skipping the comments
+            current_comment = line.lstrip("#").strip()
             continue
 
         m = bsf_regex.search(line)
         if m:
             if is_token:
                 current_token += 1
-                yield BsfInfo(current_token, tag, start_idx, end_idx, token)
+                yield BsfInfo(current_token, tag, start_idx, end_idx, token, current_comment)
+                current_comment = ""
 
             is_comment = False
             is_token = True
@@ -197,6 +204,7 @@ def read_proofreaded_bsf_data(f_name: pathlib.Path) -> Generator[BsfInfo, None, 
             token = m.group(4).strip()
         else:
             if is_comment:
+                current_comment += "\n" + line
                 continue
             elif is_token:
                 token += "\n" + line
@@ -206,4 +214,4 @@ def read_proofreaded_bsf_data(f_name: pathlib.Path) -> Generator[BsfInfo, None, 
     # Leftovers
     if is_token:
         current_token += 1
-        yield BsfInfo(current_token, tag, start_idx, end_idx, token)
+        yield BsfInfo(current_token, tag, start_idx, end_idx, token, current_comment)
