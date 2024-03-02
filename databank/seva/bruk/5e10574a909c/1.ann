@@ -1,0 +1,60 @@
+# [[кінця XX ст]] . остаточно сформувалося уявлення про
+DATE	374 385	кінця XX ст
+# їх гетерогенність , і одного царства [[Fungi]] ( або Mycota ) , в якому традиційно
+MISC	503 508	Fungi
+# , і одного царства Fungi ( або [[Mycota]] ) , в якому традиційно розглядали всі
+MISC	515 521	Mycota
+# царства переносять до найпростіших ( [[Protozoa]] ) та хроміст ( Chromista ) і називають
+MISC	746 754	Protozoa
+# найпростіших ( Protozoa ) та хроміст ( [[Chromista]] ) і називають їх грибоподібними
+MISC	770 779	Chromista
+# , до найпростіших ( [[Protozoa]] ) належать відділи акразієвих (
+MISC	856 864	Protozoa
+# ) належать відділи акразієвих ( [[Acrasiomycota]] ) , справжніх ( Myxomycota ) та
+MISC	897 910	Acrasiomycota
+# ( Acrasiomycota ) , справжніх ( [[Myxomycota]] ) та плазмодіофорових слизовиків (
+MISC	927 937	Myxomycota
+# ) та плазмодіофорових слизовиків ( [[Plasmodiophoromycota]] ) . У царство хроміст ( Chromista )
+MISC	973 993	Plasmodiophoromycota
+# ) . У царство хроміст ( [[Chromista]] ) потрапили три групи псевдогрибів :
+MISC	1018 1027	Chromista
+# три групи псевдогрибів : ооміцети ( [[Oomycota]] ) , гіфохітрієві ( Hyphochytriomycota
+MISC	1076 1084	Oomycota
+# ооміцети ( Oomycota ) , гіфохітрієві ( [[Hyphochytriomycota]] ) та лабірінтулові гриби (
+MISC	1104 1122	Hyphochytriomycota
+# ) та лабірінтулові гриби ( [[Labyrinthulomycota]] ) . Царство справжніх грибів ( Fungi )
+MISC	1150 1168	Labyrinthulomycota
+# ) . Царство справжніх грибів ( [[Fungi]] ) є найчисленнішим і об’єднує
+MISC	1200 1205	Fungi
+# представників відділів хітридієвих ( [[Chytridiomycota]] ) , гломерових ( Glomeromycota ) ,
+MISC	1273 1288	Chytridiomycota
+# ( Chytridiomycota ) , гломерових ( [[Glomeromycota]] ) , зигових ( Zygomycota ) , сумчастих
+MISC	1306 1319	Glomeromycota
+# ( Glomeromycota ) , зигових ( [[Zygomycota]] ) , сумчастих ( Ascomycota ) та
+MISC	1334 1344	Zygomycota
+# , зигових ( Zygomycota ) , сумчастих ( [[Ascomycota]] ) та базидієвих ( Basidiomycota )
+MISC	1361 1371	Ascomycota
+# ( Ascomycota ) та базидієвих ( [[Basidiomycota]] ) грибів
+MISC	1390 1403	Basidiomycota
+# до двох найбільших відділів царства [[Fungi]] — сумчастих та базидієвих , які
+MISC	2125 2130	Fungi
+# у групу вищих грибів або до підцарства [[Dikarya]] ( за наявністю у них у життєвому циклі
+MISC	2224 2231	Dikarya
+# представників справжніх слизовиків ( [[Myxomycota]] ) . Нижче наведено коротку
+MISC	2414 2424	Myxomycota
+# [[1859 р .]] відомий австрійський ботанік та
+DATE	3143 3151	1859 р .
+# 1859 р . відомий австрійський [[ботанік]] та міколог А . де Барі розробив метод
+JOB	3173 3180	ботанік
+# р . відомий австрійський ботанік та [[міколог]] А . де Барі розробив метод вивчення
+JOB	3184 3191	міколог
+# австрійський ботанік та міколог [[А . де Барі]] розробив метод вивчення повного циклу
+PERS	3192 3203	А . де Барі
+# другу назву для цих організмів — [[Mycetozoa]] ( « гриботварини » )
+MISC	3517 3526	Mycetozoa
+# розглядаються як окремий відділ [[Mycetozoa]] та розміщуються в межах царств
+MISC	3767 3776	Mycetozoa
+# тваринного світу , зокрема в царстві [[Protozoa]] ( або Amoebozoa )
+MISC	3845 3853	Protozoa
+# , зокрема в царстві Protozoa ( або [[Amoebozoa]] )
+MISC	3860 3869	Amoebozoa
