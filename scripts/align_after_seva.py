@@ -97,6 +97,10 @@ def calculate_overlaps(bsfs: List[BsfInfo]) -> Tuple[int, int]:
     (1, 0)
     >>> calculate_overlaps([BsfInfo(id=2, token="b", start_idx=1, end_idx=2, tag="tag2"), BsfInfo(id=1, token="ab", start_idx=0, end_idx=2, tag="tag1")])
     (1, 0)
+    >>> calculate_overlaps([BsfInfo(id=1, token="ab", start_idx=0, end_idx=2, tag="tag1"), BsfInfo(id=2, token="a", start_idx=0, end_idx=1, tag="tag2")])
+    (1, 0)
+    >>> calculate_overlaps([BsfInfo(id=2, token="a", start_idx=0, end_idx=1, tag="tag2"), BsfInfo(id=1, token="ab", start_idx=0, end_idx=2, tag="tag1")])
+    (1, 0)
     >>> calculate_overlaps([BsfInfo(id=1, token="abc", start_idx=0, end_idx=3, tag="tag1"), BsfInfo(id=2, token="b", start_idx=1, end_idx=2, tag="tag2")])
     (1, 0)
     >>> calculate_overlaps([BsfInfo(id=2, token="b", start_idx=1, end_idx=2, tag="tag2"), BsfInfo(id=1, token="abc", start_idx=0, end_idx=3, tag="tag1")])
@@ -127,7 +131,7 @@ def calculate_overlaps(bsfs: List[BsfInfo]) -> Tuple[int, int]:
                 full_overlaps += 1
             elif (start_in or end_in) and not (reverse_start_in and reverse_end_in):
                 partial_overlaps += 1
-                print(f"Partial overlap: {bsf1} and {bsf2}")
+                # print(f"Partial overlap: {bsf1} and {bsf2}")
 
     return full_overlaps, partial_overlaps
 

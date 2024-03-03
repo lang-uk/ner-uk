@@ -6,7 +6,7 @@
 # IOB https://en.wikipedia.org/wiki/Inside%E2%80%93outside%E2%80%93beginning_(tagging) Some sources refer to this as BIO
 # BEIOS - extended IOB with E == end (for multi word tokens)
 
-
+from typing import List, Optional
 import argparse
 import logging
 import os
@@ -18,7 +18,7 @@ from tqdm import tqdm
 from random import choices, shuffle
 from os.path import splitext
 
-from ner_utils import convert_bsf
+from ner_utils import convert_bsf, BsfInfo, OverlapStrategy
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -29,7 +29,8 @@ def convert_bsf_in_folder(
     dst_dir_path: pathlib.Path,
     converter: str = "beios",
     doc_delim: str = "\n",
-    train_test_split_file: pathlib.Path = None,
+    train_test_split_file: Optional[pathlib.Path] = None,
+    overlap_strategy: OverlapStrategy = OverlapStrategy.REMOVE_INNER,
 ) -> None:
     """
 
@@ -38,16 +39,17 @@ def convert_bsf_in_folder(
     :param dst_dir_path: where to save output data
     :param converter: `beios` or `iob` output formats
     :param train_test_split_file: path to file containing train/test lists of file names
+    :param overlap_strategy: how to handle overlapping entities
     :return:
     """
     # following 2 constants need to comply with stanza naming for corpus and language
-    corpus_name = "Ukrainian-languk"
+    corpus_name = "Ukrainian-languk-2.0-outer"
 
-    ann_path = src_dir_path / "*.tok.ann"
+    ann_path = src_dir_path / "**/*.ann"
     ann_files = glob.glob(str(ann_path))
     ann_files.sort()
 
-    tok_path = src_dir_path / "*.tok.txt"
+    tok_path = src_dir_path / "**/*.txt"
     tok_files = glob.glob(str(tok_path))
     tok_files.sort()
 
@@ -91,7 +93,14 @@ def convert_bsf_in_folder(
         with open(tok_fname) as tok_file, open(ann_fname) as ann_file:
             token_data = tok_file.read()
             ann_data = ann_file.read()
-            out_data = convert_bsf(token_data, ann_data, converter)
+
+            try:
+                out_data = convert_bsf(
+                    token_data, ann_data, converter, overlap_strategy=overlap_strategy
+                )
+            except ValueError as e:
+                tqdm.write(f"Error processing {tok_fname}: {e}")
+                continue
 
             if train_test_split_file is None:
                 target_dataset = choices(data_sets, split_weights)[0]
@@ -197,6 +206,13 @@ if __name__ == "__main__":
         default="\n",
         help="Delimiter to be used to separate documents in the output data",
     )
+    parser.add_argument(
+        "--overlap_strategy",
+        type=OverlapStrategy,
+        default=OverlapStrategy.REMOVE_INNER,
+        choices=[e.value for e in OverlapStrategy],
+        help="How to handle overlapping entities",
+    )
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -221,4 +237,5 @@ if __name__ == "__main__":
         args.c,
         args.doc_delim,
         train_test_split_file=split_file,
+        overlap_strategy=args.overlap_strategy,
     )

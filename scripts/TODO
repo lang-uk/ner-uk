@@ -1,0 +1,7 @@
+☐ Review file problems.txt and fix annotations where possible
+☐ Rerun the model training and evaluation on fixed annotations
+☐ Create a new folder with the finalized annotations in BSF format, move files from databank/output/**
+☐ Export annotations in IOB format with no inner nested tags/
+☐ Update the README.md file with the new annotations and stats
+☐ Put the model on HF
+☐ Validate the way we are calculating the IAA metrics on BSF in databank/seva/**
