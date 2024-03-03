@@ -1,3 +1,5 @@
+# Just annotation problems
+
 c5930ba45ebe.ann
 ====================================
 # торги з капітального ремонту [[будівлі №7 / 31]], які оголосила військова частина А2007
@@ -13,6 +15,7 @@ ORG	445 450	А2007
 # закупівлі військовою частиною А2007 [[Міністерства оборони України]] послуг з капітального ремонту
 ORG	451 479	Міністерства оборони України
 
+# Alignement problems which might be related to annotations problems
 
 Error processing 5a0aedfe0f5d: Hard to deal with token the context: [[5.33]] in , а й час із точністю до хвилини — [[5.33 ранку]]
 Error processing 54463e60c449: Hard to deal with token the context: [[1 січня]] in реформуванню на першому етапі , або з [[1 січня 2017 року]] провести процедуру
@@ -21,3 +24,16 @@ Error processing 095a5debd3eb: Hard to deal with token the context: [[з 90-х]]
 Error processing cbf21c99c504: Hard to deal with token the context: [[лікарів психіатра]] in позитивно, на обліку у лікарів [[психіатра]] і нарколога не перебуває, має на
 Error processing 9690987f7b71: Hard to deal with token the context: [[кримінального провадження у № 42017171090000003 від 04.01.2017 року]] in
 Error processing c5930ba45ebe: Hard to deal with token the context: [[7 / 31]] in торги з капітального ремонту [[будівлі №7 / 31]], які оголосила військова частина А2007
+
+# Overlapping tokens
+Overlaps in 5007c900c375: full: 7, partial: 2
+Partial overlap: BsfInfo(id=20, tag='PERIOD', start_idx=1791, end_idx=1834, token='з 17 % у 2011 р . до 23 % на початку 2012 р', comment=None) and BsfInfo(id=24, tag='DATE', start_idx=1820, end_idx=1836, token='початку 2012 р .', comment=None)
+Partial overlap: BsfInfo(id=24, tag='DATE', start_idx=1820, end_idx=1836, token='початку 2012 р .', comment=None) and BsfInfo(id=20, tag='PERIOD', start_idx=1791, end_idx=1834, token='з 17 % у 2011 р . до 23 % на початку 2012 р', comment=None)
+
+Overlaps in d4a86a1591b4: full: 0, partial: 2
+Partial overlap: BsfInfo(id=29, tag='JOB', start_idx=1248, end_idx=1264, token='головою комітету', comment=None) and BsfInfo(id=30, tag='ORG', start_idx=1256, end_idx=1305, token="комітету Верховної Ради з питань охорони здоров'я", comment=None)
+Partial overlap: BsfInfo(id=30, tag='ORG', start_idx=1256, end_idx=1305, token="комітету Верховної Ради з питань охорони здоров'я", comment=None) and BsfInfo(id=29, tag='JOB', start_idx=1248, end_idx=1264, token='головою комітету', comment=None)
+
+Overlaps in 64bbab373f73: full: 0, partial: 2
+Partial overlap: BsfInfo(id=21, tag='JOB', start_idx=815, end_idx=831, token='головою комітету', comment=None) and BsfInfo(id=22, tag='ORG', start_idx=823, end_idx=872, token="комітету Верховної Ради з питань охорони здоров'я", comment=None)
+Partial overlap: BsfInfo(id=22, tag='ORG', start_idx=823, end_idx=872, token="комітету Верховної Ради з питань охорони здоров'я", comment=None) and BsfInfo(id=21, tag='JOB', start_idx=815, end_idx=831, token='головою комітету', comment=None)
