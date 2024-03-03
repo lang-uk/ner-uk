@@ -9,7 +9,7 @@ from tqdm import tqdm
 BsfInfo = namedtuple("BsfInfo", "id, tag, start_idx, end_idx, token, comment", defaults=[None])
 
 def bsf_to_str(bsf: BsfInfo) -> str:
-    return f"{bsf.id}\t{bsf.tag}\t{bsf.start_idx}\t{bsf.end_idx}\t{bsf.token}"
+    return f"T{bsf.id}\t{bsf.tag}\t{bsf.start_idx}\t{bsf.end_idx}\t{bsf.token}"
 
 
 def format_token_as_beios(token: str, tag: str) -> list:
