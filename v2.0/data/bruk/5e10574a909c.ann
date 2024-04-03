@@ -1,0 +1,34 @@
+T1	JOB	191	197	учених
+T2	DATE	372	383	кінця XX ст
+T3	MISC	501	506	Fungi
+T4	MISC	513	519	Mycota
+T5	MISC	743	751	Protozoa
+T6	MISC	767	776	Chromista
+T7	MISC	852	860	Protozoa
+T8	MISC	893	906	Acrasiomycota
+T9	MISC	923	933	Myxomycota
+T10	MISC	969	989	Plasmodiophoromycota
+T11	MISC	1014	1023	Chromista
+T12	MISC	1072	1080	Oomycota
+T13	MISC	1100	1118	Hyphochytriomycota
+T14	MISC	1146	1164	Labyrinthulomycota
+T15	MISC	1196	1201	Fungi
+T16	MISC	1269	1284	Chytridiomycota
+T17	MISC	1302	1315	Glomeromycota
+T18	MISC	1330	1340	Zygomycota
+T19	MISC	1357	1367	Ascomycota
+T20	MISC	1386	1399	Basidiomycota
+T21	JOB	1453	1461	мікологи
+T22	DATE	1838	1855	сьогоднішній день
+T23	MISC	2117	2122	Fungi
+T24	MISC	2216	2223	Dikarya
+T25	MISC	2405	2415	Myxomycota
+T26	JOB	3039	3044	вчені
+T27	DATE	3127	3135	1859 р .
+T28	JOB	3157	3164	ботанік
+T29	JOB	3168	3175	міколог
+T30	PERS	3176	3187	А . де Барі
+T31	MISC	3500	3509	Mycetozoa
+T32	MISC	3749	3758	Mycetozoa
+T33	MISC	3827	3835	Protozoa
+T34	MISC	3842	3851	Amoebozoa

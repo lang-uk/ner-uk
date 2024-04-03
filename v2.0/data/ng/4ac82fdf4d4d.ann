@@ -1,0 +1,38 @@
+T1	JOB	4	14	президента
+T2	PERS	15	33	Олександр Янукович
+T3	LOC	49	58	Швейцарії
+T4	LOC	62	71	Голландії
+T5	PERS	85	99	Сергій Щербина
+T6	ART	103	121	Українській правді
+T7	ORG	151	169	MAKO Trading S. A.
+T8	DATE	189	208	14 жовтня 2011 року
+T9	LOC	211	217	Женеві
+T10	ORG	279	300	Coaltrans Switzerland
+T11	LOC	354	360	Європі
+T12	DATE	415	427	02 / 03 / 12
+T13	TIME	428	433	17:00
+T14	ORG	436	456	Mako Trading company
+T15	LOC	483	489	Женеві
+T16	LOC	531	538	України
+T17	ORG	558	576	MAKO Holding B. V.
+T18	DATE	598	617	27 жовтня 2011 року
+T19	LOC	626	631	Гаага
+T20	ORG	674	698	ITPS (Netherlands) B. V.
+T21	ORG	803	818	Metinvest B. V.
+T22	PERS	819	834	Ріната Ахметова
+T23	PERS	838	856	Вадима Новинського
+T24	JOB	869	879	директором
+T25	PERS	903	912	Януковича
+T26	PERS	927	943	Фелікс Блітштейн
+T27	ORG	985	1008	Leman Commodities S. A.
+T28	ORG	1029	1041	СКМ Ахметова
+T29	PERS	1077	1086	Януковича
+T30	ORG	1088	1100	МАКО Холдінг
+T31	ORG	1173	1191	MAKO Holding B. V.
+T32	ORG	1194	1209	MAKO Trading SA
+T33	PERS	1232	1252	Олександра Януковича
+T34	ORG	1284	1302	MAKO Holding B. V.
+T35	LOC	1441	1448	Україні
+T36	ORG	1580	1595	MAKO Trading SA
+T37	LOC	1681	1688	Україні
+T38	LOC	1746	1753	Україні

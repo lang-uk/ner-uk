@@ -1,4 +1,6 @@
 # Instructions for NER markup of text
+[Українська версія](README.md)
+
 
 (Version 2022-03-27)
 
