@@ -1,6 +1,6 @@
 ### Gender-swapped data corpus
 
-**This is the gender-swapped version** of the [Ukrainian NER corpus](v2.0/data).
+**This is the gender-swapped version** of the [Ukrainian NER corpus](../v2.0/data).
 The original corpus was filtered to retain only texts with gendered entities, such as JOB labels.
 
 The labeled data corpus is located in the `v2.0-swapped/data` folder.
@@ -34,6 +34,6 @@ There are three files for each processed text from the corpus:
 - a file with the extension `ann` contains NER-annotations for the gender-swapped text.
 - a file with the extension `meta` maps each sentence in the gender-swapped file to its corresponding sentence in the original file by sentence index.
 
-> **Note:** `filename-swapped` files correspond to the original `filename` files from the [Ukrainian NER corpus](v2.0/data).
+> **Note:** `filename-swapped` files correspond to the original `filename` files from the [Ukrainian NER corpus](../v2.0/data).
 
-For model training and validation, we recommend using the [Standard split into DEV and TEST sets](v2.0-swapped/data/dev-test-split.txt).
+For model training and validation, we recommend using the [Standard split into DEV and TEST sets](data/dev-test-split.txt).
