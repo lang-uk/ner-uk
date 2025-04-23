@@ -7,26 +7,26 @@ The labeled data corpus is located in the `v2.0-swapped/data` folder.
 
 Total in the corpus:
 
-- 405 texts (train: 283, test: 123)
-- 5_978 NER entities
+- 395 texts (train=248, dev=27, test=120)
+- 5,385 NER entities
 - 13 types of entities
 
 | | **NashiGroshi** | **Bruk** | **Total** |
 |----------- |----------------- |---------- |----------- |
-| JOB             | 1344              | 638      | 1982      |
-| PERS            | 1058              | 326      | 1384      |
-| ART             | 28                | 39       | 67        |
-| DATE            | 369               | 52       | 421       |
-| DOC             | 16                | 9        | 25        |
-| LOC             | 264               | 107      | 371       |
-| MISC            | 15                | 23       | 38        |
-| MON             | 118               | 0        | 118       |
-| ORG             | 1261              | 117      | 1378      |
-| PCT             | 48                | 1        | 49        |
-| PERIOD          | 87                | 11       | 98        |
-| QUANT           | 31                | 13       | 44        |
+| JOB             | 1248              | 485      | 1733      |
+| PERS            | 1002              | 280      | 1282      |
+| ART             | 25                | 23       | 48        |
+| DATE            | 329               | 45       | 374       |
+| DOC             | 12                | 6        | 18        |
+| LOC             | 250               | 91      | 341       |
+| MISC            | 14                | 21       | 35        |
+| MON             | 108               | 0        | 108       |
+| ORG             | 1167              | 100      | 1267      |
+| PCT             | 48                | 0        | 48        |
+| PERIOD          | 77                | 11       | 88        |
+| QUANT           | 27                | 13       | 40        |
 | TIME            | 1                 | 2        | 3         |
-| **Total**       | **4640**           | **1338**  | **5978**  |
+| **Total**       | **4308**           | **1077**  | **5385**  |
 
 There are three files for each processed text from the corpus:
 
