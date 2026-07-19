@@ -33,6 +33,28 @@ You can change the `overlap_strategy` parameter to remove outer overlapping tags
 `python3 scripts/convert_data.py` will generate iob files according to train/test split provided.
 For more parameters run `python3 scripts/convert_data.py -h`.
 
+## Exporting the corpus for the Hugging Face Hub
+`export_huggingface.py` converts the Brat corpus to token-level IOB2 records
+(JSONL + Parquet) under `huggingface/`, preserving the official
+`v2.0/data/dev-test-split.txt` split (DEV → train, TEST → test) and removing
+nested entities (`remove_inner`, same as `v2.0/iob`). The output is
+deterministic and committed to the repository.
+
+```bash
+pip install tqdm pyarrow
+python scripts/export_huggingface.py          # regenerate huggingface/
+python scripts/export_huggingface.py --check  # verify export matches the corpus (used in CI)
+```
+
+CI (`.github/workflows/hf-export-check.yml`) runs the `--check` mode on every
+push/PR, so the committed export cannot drift from the Brat source. If you
+change the corpus, rerun the export and commit the result.
+
+Uploading to the Hub is a manual step for repo owners:
+```bash
+huggingface-cli upload lang-uk/ner-uk huggingface/ . --repo-type dataset
+```
+
 ## Running tests
 ```shell
 python3 -m unittest discover -s test

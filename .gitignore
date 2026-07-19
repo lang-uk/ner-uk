@@ -3,6 +3,7 @@
 .*
 *.fasl
 !.gitignore
+!.github/
 /workspace
 *.pyc
 data_2.0/
