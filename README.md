@@ -43,6 +43,8 @@
 
 Репозиторій також містить [скрипти для конвертації даних](scripts/README.md#Converting-data-to-IOB/BEIOS-formats) у інші формати.
 
+Дані також доступні у форматі, сумісному з Hugging Face `datasets` (токени + IOB2-теги, JSONL і Parquet), у папці [huggingface](huggingface/) разом із [карткою датасету](huggingface/README.md). Експорт генерується скриптом [`scripts/export_huggingface.py`](scripts/export_huggingface.py) і перевіряється в CI на відповідність первинній Brat-розмітці.
+
 
 ## Ліцензія
 
