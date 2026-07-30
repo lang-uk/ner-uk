@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: If you use this resource, please cite the paper below.
+title: 'NER-UK: Ukrainian named-entity corpus'
+url: git@github.com:lang-uk/ner-uk
+type: dataset
+authors:
+- family-names: Chaplynskyi
+  given-names: Dmytro
+  orcid: https://orcid.org/0009-0000-0869-0999
+- family-names: Romanyshyn
+  given-names: Mariana
+preferred-citation:
+  type: conference-paper
+  title: 'Introducing NER-UK 2.0: A Rich Corpus of Named Entities for Ukrainian'
+  authors:
+  - family-names: Chaplynskyi
+    given-names: Dmytro
+    orcid: https://orcid.org/0009-0000-0869-0999
+  - family-names: Romanyshyn
+    given-names: Mariana
+  collection-title: Proceedings of the Third Ukrainian Natural Language Processing Workshop (UNLP) @ LREC-COLING
+    2024
+  collection-type: proceedings
+  publisher:
+    name: ELRA and ICCL
+  conference:
+    name: Proceedings of the Third Ukrainian Natural Language Processing Workshop (UNLP) @ LREC-COLING
+      2024
+  year: 2024
+  month: 5
+  start: 23
+  end: 29
+  url: https://aclanthology.org/2024.unlp-1.4/
+  doi: 10.63317/5mqwb7ftiezv
+  isbn: 978-2-493814-43-2

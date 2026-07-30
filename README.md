@@ -43,6 +43,34 @@
 
 Репозиторій також містить [скрипти для конвертації даних](scripts/README.md#Converting-data-to-IOB/BEIOS-formats) у інші формати.
 
+<!-- citekit:start -->
+## Як цитувати
+
+Якщо ви використовуєте **NER-UK: Ukrainian named-entity corpus**, будь ласка, процитуйте статтю, а не посилання на репозиторій — це єдиний спосіб, у який внесок стає видимим у наукометрії.
+
+> Chaplynskyi, D. and Romanyshyn, M. (2024). Introducing NER-UK 2.0: A Rich Corpus of Named Entities for Ukrainian. In Proceedings of the Third Ukrainian Natural Language Processing Workshop (UNLP) @ LREC-COLING 2024, pages 23–29. ELRA and ICCL. https://doi.org/10.63317/5mqwb7ftiezv
+
+```bibtex
+@inproceedings{chaplynskyi-romanyshyn-2024-introducing,
+    title     = "Introducing {NER}-{UK} 2.0: A Rich Corpus of Named Entities for {U}krainian",
+    author    = "Chaplynskyi, Dmytro and
+      Romanyshyn, Mariana",
+    editor    = "Romanyshyn, Mariana and
+      Romanyshyn, Nataliia and
+      Hlybovets, Andrii and
+      Ignatenko, Oleksii",
+    booktitle = "Proceedings of the Third Ukrainian Natural Language Processing Workshop (UNLP) @ LREC-COLING 2024",
+    month     = may,
+    year      = "2024",
+    address   = "Torino, Italia",
+    publisher = "ELRA and ICCL",
+    url       = "https://aclanthology.org/2024.unlp-1.4/",
+    doi       = "10.63317/5mqwb7ftiezv",
+    pages     = "23--29",
+    ISBN      = "978-2-493814-43-2"
+}
+```
+<!-- citekit:end -->
 
 ## Ліцензія
 
